@@ -15,6 +15,7 @@ from flask import Flask, request
 # }
 
 
+
 port = int(os.environ.get('PORT', 4000))
 
 app = Flask(__name__)
@@ -22,7 +23,6 @@ app = Flask(__name__)
 WEBHOOK_VERIFY_TOKEN = "HAPPY"
 
 @app.route("/whatsapp", methods=["GET"])
-
 def verify_webhook():
     mode = request.args.get("hub.mode")
     token = request.args.get("hub.verify_token")
@@ -33,19 +33,15 @@ def verify_webhook():
         return challenge, 200
     else:
         return '', 403
-    
 
 @app.get("/")
 def home():
     return "<p>Welcome to HTK API</p>"
 
-
 @app.route("/whatsapp", methods=["POST"])
-
-
 def handle_incoming_message():
     print("We outside!!!!")
-
+    return "OK", 200
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=port)
