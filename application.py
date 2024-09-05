@@ -16,6 +16,9 @@ from flask import Flask, request
 
 
 
+import os
+from flask import Flask, request
+
 port = int(os.environ.get('PORT', 4000))
 
 app = Flask(__name__)
@@ -28,20 +31,27 @@ def verify_webhook():
     token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
 
+    print(f"Verification attempt - Mode: {mode}, Token: {token}, Challenge: {challenge}")
+
     if mode == "subscribe" and token == WEBHOOK_VERIFY_TOKEN:
         print("Webhook verified successfully!")
-        return challenge, 200
+        return str(challenge), 200
     else:
+        print("Webhook verification failed.")
         return '', 403
 
-@app.get("/")
+@app.route("/")
 def home():
     return "<p>Welcome to HTK API</p>"
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
-    print("We outside!!!!")
+    print("Received incoming message")
+    # Here you would typically process the incoming message
+    # For now, we'll just print the raw data
+    print(request.get_json())
     return "OK", 200
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=port)
+    print(f"Starting server on port {port}")
+    app.run(host='0.0.0.0', port=port, debug=True)
