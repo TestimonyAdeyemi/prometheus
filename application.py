@@ -51,21 +51,8 @@ def whatsapp_verify():
 
 @app.route("/", methods=["POST"])
 def handle_incoming_message():
-    print("Received incoming message")
-
-
-    data = {
-            "messaging_product": "whatsapp",
-            "to": "2348143237903",
-            "type": "text",
-            "text": {
-                "body": "friend, don't reply"
-            }
-        }
-
-    response = requests.post(url, headers=headers, json=data)
-
-
+    message = request.json
+    print(message)
     
     print(request.get_json())
     return "OK", 200
@@ -73,3 +60,32 @@ def handle_incoming_message():
 if __name__ == "__main__":
     print(f"Starting server on port {port}")
     app.run(host='0.0.0.0', port=port, debug=True)
+
+
+
+
+
+
+
+
+
+
+
+# app_id = "6979647548799998"
+
+#     if data['entry'][0]['changes'][0]['value']['metadata']['phone_number_id'] != os.getenv(f"PHONE_NUMBER_ID_{app_id}"):
+#         return "Incorrect app", 403
+#     # Process the message...
+#     print("Received incoming message")
+
+
+#     data = {
+#             "messaging_product": "whatsapp",
+#             "to": "2348143237903",
+#             "type": "text",
+#             "text": {
+#                 "body": "friend, don't reply"
+#             }
+#         }
+
+#     response = requests.post(url, headers=headers, json=data)
