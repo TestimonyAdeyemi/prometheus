@@ -4,15 +4,15 @@ import flask
 from flask import Flask, request
 
 
-# url = "https://graph.facebook.com/v19.0/228794113648969/messages"
+url = "https://graph.facebook.com/v19.0/228794113648969/1180888120028690/messages"
 
 # #print(os.getenv('WHATSAPP_API_TOKEN'))
 
-# # Define the headers
-# headers = {
-#     "Authorization": "Bearer EAAQyAvDp7hIBO1qJ1PCXPGwGZBtQl593EmoEIQJQVhgzivwYWTGVvCoQs7SDDtx6DZBWNvhH9LiuVRDXstBXJiBAawGaZAN9FSWtZBkL3eQqu8oQZAYKSL03WGEDRhQLAxBBSZCy3MpZAjrg95YSPNJ8a5Nm5QgJZCIfiuqn1ZByM3geoB81T9FfuZChJAEobv5E0BZBAmYUa9902OfW9gACv9bLT1uqAKwbTjFg44Y",
-#     "Content-Type": "application/json"
-# }
+# Define the headers
+headers = {
+    "Authorization": "Bearer EAAQyAvDp7hIBO4eE2XhzfI4PAZCdvXrnJEVBCZAMRP9q4ZBPTYEcsmK7vcZCv06XY8N8lntW8EV8C0ZClk4o5myXpoqcHdeAtLR4fVLHH6oeDTZCSuSKGZCbPBwROs9xYTpcLrWsbyqzStCQeZCZBip4L2QwZBohWvwyZBuGDvhVcUN5LDZBNrXJkdWFZBnJNEM3j4KomssjbEZB622bAMswxHdOFOCit3ZC7bsefWqdBgZD",
+    "Content-Type": "application/json"
+}
 
 
 import os
@@ -48,9 +48,25 @@ def root():
 def whatsapp_verify():
     return verify_webhook()
 
+
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     print("Received incoming message")
+
+
+    data = {
+            "messaging_product": "whatsapp",
+            "to": "2348143237903",
+            "type": "text",
+            "text": {
+                "body": "friend, don't reply"
+            }
+        }
+
+    response = requests.post(url, headers=headers, json=data)
+
+
+    
     print(request.get_json())
     return "OK", 200
 
