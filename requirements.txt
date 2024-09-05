@@ -1,15 +1,3 @@
-annotated-types
-APScheduler
-blinker
-CacheControl
-cachetools
-certifi
-cffi
-charset-normalizer
-click
-colorama
-cryptography
-firebase-admin
 Flask
 google-ai-generativelanguage
 google-api-core
@@ -67,5 +55,4 @@ pillow
 googlesearch-python
 dateparser
 jsonify
-googletrans==4.0.0-rc1
 
