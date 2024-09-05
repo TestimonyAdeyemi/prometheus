@@ -49,7 +49,7 @@ def whatsapp_verify():
     return verify_webhook()
 
 
-@app.route("/whatsapp", methods=["POST"])
+@app.route("/", methods=["POST"])
 def handle_incoming_message():
     print("Received incoming message")
 
