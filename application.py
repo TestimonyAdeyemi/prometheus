@@ -15,7 +15,6 @@ from flask import Flask, request
 # }
 
 
-
 import os
 from flask import Flask, request
 
@@ -25,7 +24,6 @@ app = Flask(__name__)
 
 WEBHOOK_VERIFY_TOKEN = "HAPPY"
 
-@app.route("/whatsapp", methods=["GET"])
 def verify_webhook():
     mode = request.args.get("hub.mode")
     token = request.args.get("hub.verify_token")
@@ -40,15 +38,19 @@ def verify_webhook():
         print("Webhook verification failed.")
         return '', 403
 
-@app.route("/")
-def home():
+@app.route("/", methods=["GET"])
+def root():
+    if "hub.mode" in request.args:
+        return verify_webhook()
     return "<p>Welcome to HTK API</p>"
+
+@app.route("/whatsapp", methods=["GET"])
+def whatsapp_verify():
+    return verify_webhook()
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     print("Received incoming message")
-    # Here you would typically process the incoming message
-    # For now, we'll just print the raw data
     print(request.get_json())
     return "OK", 200
 
