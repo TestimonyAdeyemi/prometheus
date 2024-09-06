@@ -6,15 +6,7 @@ import logging
 from flask import Flask, request, jsonify
 
 
-url = "https://graph.facebook.com/v20.0/396015606935687/messages"
 
-# #print(os.getenv('WHATSAPP_API_TOKEN'))
-
-# Define the headers
-headers = {
-    "Authorization": "Bearer EAAPPDu1MMoEBOxILlczGwD9VXUSXeVqadzvCBDbZBagpZASSjty90cgWL6VFnprRifXDviIScMF3xKAJNccTiowh7Kzfz7YaecoVs43TxPSMYfFTcPkmI9w2fdLpYZB0q7mkvuRcjdYcHLYDxfwdiR1MPI1oEvxg8wHfTBiDeO9VcMdOvYZCcA5CiapB3bHnFqAeZAZAC0meO05o0STrSBUPlMrziJ8CIlOPsZD",
-    "Content-Type": "application/json"
-}
 
 
 import os
@@ -105,6 +97,28 @@ def handle_incoming_message():
     # If the request passes validation, process it here
     message = request.get_json()
     print("Processing message:", message)
+
+    url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+    headers = {
+    "Authorization": "Bearer EAAPPDu1MMoEBOxILlczGwD9VXUSXeVqadzvCBDbZBagpZASSjty90cgWL6VFnprRifXDviIScMF3xKAJNccTiowh7Kzfz7YaecoVs43TxPSMYfFTcPkmI9w2fdLpYZB0q7mkvuRcjdYcHLYDxfwdiR1MPI1oEvxg8wHfTBiDeO9VcMdOvYZCcA5CiapB3bHnFqAeZAZAC0meO05o0STrSBUPlMrziJ8CIlOPsZD",
+    "Content-Type": "application/json"
+    }
+
+    data = {
+        "messaging_product": "whatsapp",
+        "to": "2348143237903",
+        "type": "text",
+        "text": {
+            "body": "do not reply"
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+
+
+
+
     return "OK", 200
 
 
