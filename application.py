@@ -59,7 +59,9 @@ def handle_incoming_message():
         # Attempt to parse the incoming JSON request
         message = request.get_json(silent=True)
         print(message)
-        
+
+        print("Skibbi tOLIET Rizzz")
+
         return "OK", 200
 
     except Exception as e:
