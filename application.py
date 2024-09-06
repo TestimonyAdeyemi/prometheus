@@ -108,14 +108,6 @@ def handle_incoming_message():
     wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
 
-    # Check if the message is from a user (not from your bot)
-    incoming_phone_number = message['entry'][0]['changes'][0]['value']['metadata']['display_phone_number']
-    
-    # If the incoming message is from your own business number, ignore it
-    if incoming_phone_number == MY_BUSINESS_PHONE_NUMBER:
-        print("Ignoring message from business number to prevent loop.")
-        return "OK", 200
-
     url = "https://graph.facebook.com/v20.0/396015606935687/messages"
     headers = {
     "Authorization": "Bearer EAAPPDu1MMoEBOxILlczGwD9VXUSXeVqadzvCBDbZBagpZASSjty90cgWL6VFnprRifXDviIScMF3xKAJNccTiowh7Kzfz7YaecoVs43TxPSMYfFTcPkmI9w2fdLpYZB0q7mkvuRcjdYcHLYDxfwdiR1MPI1oEvxg8wHfTBiDeO9VcMdOvYZCcA5CiapB3bHnFqAeZAZAC0meO05o0STrSBUPlMrziJ8CIlOPsZD",
