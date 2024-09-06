@@ -51,6 +51,7 @@ def whatsapp_verify():
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
+    print("I got a message")
     message = request.json
     print(message)
     
