@@ -2,6 +2,7 @@ import os
 import requests
 import flask
 from flask import Flask, request
+import logging
 
 
 url = "https://graph.facebook.com/v19.0/228794113648969/1180888120028690/messages"
@@ -38,46 +39,64 @@ def verify_webhook():
         print("Webhook verification failed.")
         return '', 403
 
-@app.route("/", methods=["GET"])
-def root():
-    if "hub.mode" in request.args:
-        return verify_webhook()
-    return "<p>Welcome to HTK API</p>"
+
+
+# @app.route("/", methods=["GET"])
+# def root():
+#     if "hub.mode" in request.args:
+#         return verify_webhook()
+#     return "<p>Welcome to HTK API</p>"
+
+
+
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/whatsapp", methods=["GET"])
 def whatsapp_verify():
+    # Assuming verify_webhook handles verification challenge from WhatsApp
     return verify_webhook()
-
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     try:
         # Log that a message was received
-        print("I got a message")
-        
+        app.logger.debug("Received POST request on /whatsapp")
+
+        # Check headers to ensure content type is application/json
+        if request.content_type != 'application/json':
+            app.logger.warning(f"Unexpected content type: {request.content_type}")
+            return "Unsupported Media Type", 415
+
+        # Log raw incoming data
+        raw_data = request.data
+        app.logger.debug(f"Raw data received: {raw_data}")
+
         # Attempt to parse the incoming JSON request
-        message = request.get_json()
-        
-        # Log the raw incoming data for deeper inspection
-        print("Raw message data:", message)
-        
-        # If message is None, it means JSON parsing failed
+        message = request.get_json(silent=True)
+
+        # Log if JSON parsing fails
         if message is None:
-            print("No JSON payload received or payload is malformed")
+            app.logger.error("Failed to parse JSON from the incoming request")
             return "Bad Request", 400
-        
-        # Log specific keys to ensure correct parsing
+
+        # Log the parsed JSON message
+        app.logger.debug(f"Parsed JSON message: {message}")
+
+        # If specific structure is expected, log its presence or absence
         if 'entry' in message:
-            print("Received entry:", message['entry'])
+            app.logger.info(f"Received entry: {message['entry']}")
         else:
-            print("Unexpected format:", message)
-        
+            app.logger.warning(f"Unexpected message format: {message}")
+
         return "OK", 200
-    
+
     except Exception as e:
         # Log any exception that occurs for debugging purposes
-        print(f"Error processing incoming message: {str(e)}")
+        app.logger.error(f"Error processing incoming message: {str(e)}")
         return "Internal Server Error", 500
+
 
 
 if __name__ == "__main__":
