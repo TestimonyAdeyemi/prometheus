@@ -51,12 +51,34 @@ def whatsapp_verify():
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
-    print("I got a message")
-    message = request.json
-    print(message)
+    try:
+        # Log that a message was received
+        print("I got a message")
+        
+        # Attempt to parse the incoming JSON request
+        message = request.get_json()
+        
+        # Log the raw incoming data for deeper inspection
+        print("Raw message data:", message)
+        
+        # If message is None, it means JSON parsing failed
+        if message is None:
+            print("No JSON payload received or payload is malformed")
+            return "Bad Request", 400
+        
+        # Log specific keys to ensure correct parsing
+        if 'entry' in message:
+            print("Received entry:", message['entry'])
+        else:
+            print("Unexpected format:", message)
+        
+        return "OK", 200
     
-    print(request.get_json())
-    return "OK", 200
+    except Exception as e:
+        # Log any exception that occurs for debugging purposes
+        print(f"Error processing incoming message: {str(e)}")
+        return "Internal Server Error", 500
+
 
 if __name__ == "__main__":
     print(f"Starting server on port {port}")
