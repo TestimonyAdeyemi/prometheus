@@ -5,13 +5,13 @@ from flask import Flask, request
 import logging
 
 
-url = "https://graph.facebook.com/v19.0/228794113648969/1180888120028690/messages"
+url = "https://graph.facebook.com/v20.0/396015606935687/messages"
 
 # #print(os.getenv('WHATSAPP_API_TOKEN'))
 
 # Define the headers
 headers = {
-    "Authorization": "Bearer EAAQyAvDp7hIBO4eE2XhzfI4PAZCdvXrnJEVBCZAMRP9q4ZBPTYEcsmK7vcZCv06XY8N8lntW8EV8C0ZClk4o5myXpoqcHdeAtLR4fVLHH6oeDTZCSuSKGZCbPBwROs9xYTpcLrWsbyqzStCQeZCZBip4L2QwZBohWvwyZBuGDvhVcUN5LDZBNrXJkdWFZBnJNEM3j4KomssjbEZB622bAMswxHdOFOCit3ZC7bsefWqdBgZD",
+    "Authorization": "Bearer EAAPPDu1MMoEBOxILlczGwD9VXUSXeVqadzvCBDbZBagpZASSjty90cgWL6VFnprRifXDviIScMF3xKAJNccTiowh7Kzfz7YaecoVs43TxPSMYfFTcPkmI9w2fdLpYZB0q7mkvuRcjdYcHLYDxfwdiR1MPI1oEvxg8wHfTBiDeO9VcMdOvYZCcA5CiapB3bHnFqAeZAZAC0meO05o0STrSBUPlMrziJ8CIlOPsZD",
     "Content-Type": "application/json"
 }
 
