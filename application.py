@@ -3,6 +3,7 @@ import requests
 import flask
 from flask import Flask, request
 import logging
+from flask import Flask, request, jsonify
 
 
 url = "https://graph.facebook.com/v20.0/396015606935687/messages"
@@ -54,48 +55,58 @@ def whatsapp_verify():
 
 
 
-# Define allowed phone number and ID to accept requests from
+
+
+app = Flask(__name__)
+
+# Define allowed display phone number and phone number ID
 ALLOWED_DISPLAY_PHONE_NUMBER = "2347070471117"
 ALLOWED_PHONE_NUMBER_ID = "396015606935687"
 
+@app.before_request
+def validate_request():
+    # Only run validation for POST requests to the /whatsapp endpoint
+    if request.method == "POST" and request.path == "/whatsapp":
+        try:
+            # Extract JSON payload from incoming request
+            data = request.get_json()
+            if not data:
+                print("No JSON payload received.")
+                return jsonify({"error": "Bad Request"}), 400
+
+            # Navigate through payload to extract phone number details
+            entry = data.get('entry', [])
+            if not entry:
+                print("No entry in the payload.")
+                return jsonify({"error": "Bad Request"}), 400
+            
+            changes = entry[0].get('changes', [])
+            if not changes:
+                print("No changes in the entry.")
+                return jsonify({"error": "Bad Request"}), 400
+
+            value = changes[0].get('value', {})
+            metadata = value.get('metadata', {})
+            display_phone_number = metadata.get('display_phone_number')
+            phone_number_id = metadata.get('phone_number_id')
+
+            # Validate the incoming display phone number and phone number ID
+            if (display_phone_number != ALLOWED_DISPLAY_PHONE_NUMBER or 
+                phone_number_id != ALLOWED_PHONE_NUMBER_ID):
+                print(f"Rejected request from display number: {display_phone_number}, phone ID: {phone_number_id}")
+                return jsonify({"error": "Forbidden"}), 403  # Reject the request early
+            
+        except Exception as e:
+            print(f"Error during request validation: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
-    try:
-        # Extract JSON payload from incoming request
-        message = request.get_json()
+    # If the request passes validation, process it here
+    message = request.get_json()
+    print("Processing message:", message)
+    return "OK", 200
 
-        # Check if the payload exists
-        if not message:
-            print("No JSON payload received.")
-            return "Bad Request", 400
-
-        # Extract relevant data from payload
-        entry = message.get('entry', [])[0]  # Get the first entry
-        changes = entry.get('changes', [])[0]  # Get the first change
-        value = changes.get('value', {})
-        metadata = value.get('metadata', {})
-
-        # Validate the incoming display phone number and phone number ID
-        display_phone_number = metadata.get('display_phone_number')
-        phone_number_id = metadata.get('phone_number_id')
-
-        if (display_phone_number != ALLOWED_DISPLAY_PHONE_NUMBER or 
-            phone_number_id != ALLOWED_PHONE_NUMBER_ID):
-            print(f"Rejected request from display number: {display_phone_number}, phone ID: {phone_number_id}")
-            return "Forbidden", 403  # Reject with a 403 Forbidden status
-
-        # If the request is valid, print and process the message
-        print("Received a valid message from the allowed phone number.")
-        print(message)
-
-        # Continue with your message processing logic here
-        # ...
-
-        return "OK", 200
-
-    except Exception as e:
-        print(f"Error processing the request: {e}")
-        return "Internal Server Error", 500
 
 if __name__ == "__main__":
     print(f"Starting server on port {port}")
