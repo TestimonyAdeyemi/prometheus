@@ -92,11 +92,20 @@ def validate_request():
             print(f"Error during request validation: {e}")
             return jsonify({"error": "Internal Server Error"}), 500
 
+
+
+
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     # If the request passes validation, process it here
     message = request.get_json()
     print("Processing message:", message)
+
+        # Extract 'body' from the message
+    body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+
+    # Extract 'wa_id' from the contact
+    wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
     url = "https://graph.facebook.com/v20.0/396015606935687/messages"
     headers = {
@@ -109,15 +118,11 @@ def handle_incoming_message():
         "to": "2348143237903",
         "type": "text",
         "text": {
-            "body": "do not reply"
+            "body": body
         }
     }
 
     response = requests.post(url, headers=headers, json=data)
-
-
-
-
 
     return "OK", 200
 
