@@ -40,18 +40,12 @@ def verify_webhook():
         return '', 403
 
 
-
 # @app.route("/", methods=["GET"])
 # def root():
 #     if "hub.mode" in request.args:
 #         return verify_webhook()
 #     return "<p>Welcome to HTK API</p>"
 
-
-
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/whatsapp", methods=["GET"])
 def whatsapp_verify():
@@ -61,35 +55,11 @@ def whatsapp_verify():
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     try:
-        # Log that a message was received
-        app.logger.debug("Received POST request on /whatsapp")
-
-        # Check headers to ensure content type is application/json
-        if request.content_type != 'application/json':
-            app.logger.warning(f"Unexpected content type: {request.content_type}")
-            return "Unsupported Media Type", 415
-
-        # Log raw incoming data
-        raw_data = request.data
-        app.logger.debug(f"Raw data received: {raw_data}")
 
         # Attempt to parse the incoming JSON request
         message = request.get_json(silent=True)
-
-        # Log if JSON parsing fails
-        if message is None:
-            app.logger.error("Failed to parse JSON from the incoming request")
-            return "Bad Request", 400
-
-        # Log the parsed JSON message
-        app.logger.debug(f"Parsed JSON message: {message}")
-
-        # If specific structure is expected, log its presence or absence
-        if 'entry' in message:
-            app.logger.info(f"Received entry: {message['entry']}")
-        else:
-            app.logger.warning(f"Unexpected message format: {message}")
-
+        print(message)
+        
         return "OK", 200
 
     except Exception as e:
