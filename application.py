@@ -52,23 +52,43 @@ def whatsapp_verify():
     # Assuming verify_webhook handles verification challenge from WhatsApp
     return verify_webhook()
 
+
+
+
+# Define the phone number to accept requests from
+ALLOWED_PHONE_NUMBER = "2347070471117"
+
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
     try:
+        # Extract JSON payload from incoming request
+        message = request.get_json()
 
-        # Attempt to parse the incoming JSON request
-        message = request.get_json(silent=True)
+        # Check if the payload exists
+        if not message:
+            print("No JSON payload received.")
+            return "Bad Request", 400
+
+        # Check if the request is coming from the allowed phone number
+        phone_number_id = message.get("phone_number_id")
+
+        # Validate the incoming phone number
+        if phone_number_id != ALLOWED_PHONE_NUMBER:
+            print(f"Rejected request from phone number: {phone_number_id}")
+            return "Forbidden", 403  # Reject with a 403 Forbidden status
+
+        # If the request is valid, print and process the message
+        print("Received a valid message from the allowed phone number.")
         print(message)
 
-        print("Skibbi tOLIET Rizzz")
+        # Continue with your message processing logic here
+        # ...
 
         return "OK", 200
 
     except Exception as e:
-        # Log any exception that occurs for debugging purposes
-        app.logger.error(f"Error processing incoming message: {str(e)}")
+        print(f"Error processing the request: {e}")
         return "Internal Server Error", 500
-
 
 
 if __name__ == "__main__":
