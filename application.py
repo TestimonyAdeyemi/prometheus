@@ -54,9 +54,9 @@ def whatsapp_verify():
 
 
 
-
-# Define the phone number to accept requests from
-ALLOWED_PHONE_NUMBER = "2347070471117"
+# Define allowed phone number and ID to accept requests from
+ALLOWED_DISPLAY_PHONE_NUMBER = "2347070471117"
+ALLOWED_PHONE_NUMBER_ID = "396015606935687"
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_incoming_message():
@@ -69,12 +69,19 @@ def handle_incoming_message():
             print("No JSON payload received.")
             return "Bad Request", 400
 
-        # Check if the request is coming from the allowed phone number
-        phone_number_id = message.get("phone_number_id")
+        # Extract relevant data from payload
+        entry = message.get('entry', [])[0]  # Get the first entry
+        changes = entry.get('changes', [])[0]  # Get the first change
+        value = changes.get('value', {})
+        metadata = value.get('metadata', {})
 
-        # Validate the incoming phone number
-        if phone_number_id != ALLOWED_PHONE_NUMBER:
-            print(f"Rejected request from phone number: {phone_number_id}")
+        # Validate the incoming display phone number and phone number ID
+        display_phone_number = metadata.get('display_phone_number')
+        phone_number_id = metadata.get('phone_number_id')
+
+        if (display_phone_number != ALLOWED_DISPLAY_PHONE_NUMBER or 
+            phone_number_id != ALLOWED_PHONE_NUMBER_ID):
+            print(f"Rejected request from display number: {display_phone_number}, phone ID: {phone_number_id}")
             return "Forbidden", 403  # Reject with a 403 Forbidden status
 
         # If the request is valid, print and process the message
@@ -89,7 +96,6 @@ def handle_incoming_message():
     except Exception as e:
         print(f"Error processing the request: {e}")
         return "Internal Server Error", 500
-
 
 if __name__ == "__main__":
     print(f"Starting server on port {port}")
