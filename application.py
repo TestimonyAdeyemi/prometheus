@@ -123,7 +123,7 @@ def handle_incoming_message():
         chat_history = []
 
     # Configure Gemini AI
-    genai.configure(api_key=os.environ["AIzaSyDmX5Z5gwQ2v_Y696AjLRZgM0LyHNo91o4"])
+    genai.configure(api_key="AIzaSyDmX5Z5gwQ2v_Y696AjLRZgM0LyHNo91o4")
 
     # Create the model
     generation_config = {
