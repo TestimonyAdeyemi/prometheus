@@ -5,6 +5,10 @@ from flask import Flask, request
 import logging
 from flask import Flask, request, jsonify
 
+import json
+import google.generativeai as genai
+
+
 
 
 
@@ -96,22 +100,65 @@ def validate_request():
 MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 
 @app.route("/whatsapp", methods=["POST"])
+
 def handle_incoming_message():
     # If the request passes validation, process it here
     message = request.get_json()
     print("Processing message:", message)
 
-        # Extract 'body' from the message
+    # Extract 'body' from the message
     body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
 
     # Extract 'wa_id' from the contact
     wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
+    # File path for user history
+    history_file = f"user_{wa_id}_history.json"
 
+    # Check if user history exists
+    if os.path.exists(history_file):
+        with open(history_file, 'r') as f:
+            chat_history = json.load(f)
+    else:
+        chat_history = []
+
+    # Configure Gemini AI
+    genai.configure(api_key=os.environ["AIzaSyDmX5Z5gwQ2v_Y696AjLRZgM0LyHNo91o4"])
+
+    # Create the model
+    generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+    }
+
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-pro",
+        generation_config=generation_config,
+        system_instruction="You are the customer representative for this business\n\n[Your system instruction here...]"
+    )
+
+    # Start chat session with existing history
+    chat_session = model.start_chat(history=chat_history)
+
+    # Send user message and get response
+    response = chat_session.send_message(body)
+
+    # Update chat history
+    chat_history.append({"role": "user", "parts": [body]})
+    chat_history.append({"role": "model", "parts": [response.text]})
+
+    # Save updated chat history
+    with open(history_file, 'w') as f:
+        json.dump(chat_history, f)
+
+    # Send response back to WhatsApp
     url = "https://graph.facebook.com/v20.0/396015606935687/messages"
     headers = {
-    "Authorization": "Bearer EAAPPDu1MMoEBOxILlczGwD9VXUSXeVqadzvCBDbZBagpZASSjty90cgWL6VFnprRifXDviIScMF3xKAJNccTiowh7Kzfz7YaecoVs43TxPSMYfFTcPkmI9w2fdLpYZB0q7mkvuRcjdYcHLYDxfwdiR1MPI1oEvxg8wHfTBiDeO9VcMdOvYZCcA5CiapB3bHnFqAeZAZAC0meO05o0STrSBUPlMrziJ8CIlOPsZD",
-    "Content-Type": "application/json"
+        "Authorization": "Bearer EAAPPDu1MMoEBO4p1DoaeusIUfX4hAzXcKelPMEdJeeTjI46KvJcZBJYhvNZAmJxCjCJ89gMuQlmUPXxPN9atBx7viux3Dskk1mA44MW3P1H7mdz078CuHxQzOh98d5ozblkvxWDlHafIZCkZBGr3vemJVs7hZAePO3ZCl4aax5CJddUnF6jELmCZBwgn3LZCQaeVrZCT4GxBZAMkUbOkaTnDtS1644Dfy6D1MzUF9EdZBw180gZD",
+        "Content-Type": "application/json"
     }
 
     data = {
@@ -119,14 +166,13 @@ def handle_incoming_message():
         "to": wa_id,
         "type": "text",
         "text": {
-            "body": body
+            "body": response.text
         }
     }
 
     response = requests.post(url, headers=headers, json=data)
 
     return "OK", 200
-
 
 if __name__ == "__main__":
     print(f"Starting server on port {port}")
@@ -137,29 +183,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-# app_id = "6979647548799998"
-
-#     if data['entry'][0]['changes'][0]['value']['metadata']['phone_number_id'] != os.getenv(f"PHONE_NUMBER_ID_{app_id}"):
-#         return "Incorrect app", 403
-#     # Process the message...
-#     print("Received incoming message")
-
-
-#     data = {
-#             "messaging_product": "whatsapp",
-#             "to": "2348143237903",
-#             "type": "text",
-#             "text": {
-#                 "body": "friend, don't reply"
-#             }
-#         }
-
-#     response = requests.post(url, headers=headers, json=data)
 
 
 
