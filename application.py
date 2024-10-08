@@ -109,15 +109,70 @@ MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 def handle_incoming_message():
 
     message = request.get_json()
-    print(message)
+
+    #print(message)
 
 
 
      # Extract the list of messages if it exists
     if "messages" in message["entry"][0]["changes"][0]["value"]:
         body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+        print(body)
         if body: 
             wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
+
+
+        # File path for user history
+        history_file = f"user_{wa_id}_history.json"
+
+        # Check if user history exists
+        if os.path.exists(history_file):
+            with open(history_file, 'r') as f:
+                chat_history = json.load(f)
+        else:
+            chat_history = []
+
+
+        
+
+
+        from groq import Groq
+
+        # Add your API key here
+        api_key = "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"
+
+        # Instantiate the client with the API key
+        client = Groq(api_key=api_key)
+
+        # Store the output in a variable
+        output = ""
+
+        completion = client.chat.completions.create(
+            model="llama-3.2-11b-text-preview",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a an AI engineer that builds chatbots. What makes you special is that you actually automatically build AIs just by text, you are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them. \n\nAlways have the following 4 things:\n1. Your user's name\n2. The name of the AI your user wants to build\n3. What the AI should be able to do?\n4. Where to access the AI, website or whatsapp\n\nYour personality is friendly, kind and helpful. "
+        },
+                {
+                    "role": "user",
+                    "content": body
+                }
+            ],
+            temperature=1,
+            max_tokens=1024,
+            top_p=1,
+            stream=True,
+            stop=None,
+        )
+
+        # Append the output to the variable
+        for chunk in completion:
+            output += chunk.choices[0].delta.content or ""
+
+        # Now `output` holds the response from the model
+        print(output)
+
 
 
            
@@ -133,7 +188,7 @@ def handle_incoming_message():
             "to": wa_id,
             "type": "text",
             "text": {
-                "body": body
+                "body": output
             }
         }
 
@@ -141,10 +196,18 @@ def handle_incoming_message():
 
 
 
+        # Update chat history
+        chat_history.append({"role": "user", "parts": [body]})
+        chat_history.append({"role": "model", "parts": [response.text]})
+
+        # Save updated chat history
+        with open(history_file, 'w') as f:
+            json.dump(chat_history, f)
+
+
+
     else:
         pass
-
-
 
     return "OK", 200
 
