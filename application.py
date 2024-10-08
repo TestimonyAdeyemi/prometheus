@@ -149,11 +149,11 @@ def handle_incoming_message():
             messages=[
                 {
                     "role": "system",
-                    "content": "what is the mood of this message, 1. sad, 2. angry 3.happy 4. Neutral.\nReply me only with a number between 1 and 4. Do not give any explanations."
+                    "content": "write a well detailed prompt instruction to train an ai for what this user wants to achieve."
                 },
                 {
                     "role": "user",
-                    "content": body
+                    "content": f"{body}"
                 }
             ],
             temperature=1,
@@ -168,18 +168,8 @@ def handle_incoming_message():
             output += chunk.choices[0].delta.content or ""
 
         # Now `output` holds the response from the model
-        print(f"user mood of {output}")
+        print(f"this is the user input:  {output}")
 
-
-
-
-        # Update chat history
-        chat_history.append({"role": "user", "parts": [body]})
-        chat_history.append({"role": "model", "parts": [output]})
-
-        # Save updated chat history
-        with open(history_file, 'w') as f:
-            json.dump(chat_history, f)
 
         # Send response back to WhatsApp
         url = "https://graph.facebook.com/v20.0/396015606935687/messages"
@@ -199,6 +189,63 @@ def handle_incoming_message():
 
         response = requests.post(url, headers=headers, json=data)
 
+
+
+
+
+        from groq import Groq
+
+        # Add your API key here
+        api_key = "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"
+
+        # Instantiate the client with the API key
+        client = Groq(api_key=api_key)
+
+        # Store the output in a variable
+        output = ""
+
+        completion = client.chat.completions.create(
+            model="llama-3.2-11b-text-preview",
+            messages=[
+                {
+                    "role": "system",
+                    "content": output
+                },
+                {
+                    "role": "user",
+                    "content": f"{body}"
+                }
+            ],
+            temperature=1,
+            max_tokens=1024,
+            top_p=1,
+            stream=True,
+            stop=None,
+        )
+
+        # Append the output to the variable
+        for chunk in completion:
+            output += chunk.choices[0].delta.content or ""
+
+
+
+
+
+
+
+
+
+
+
+        # Update chat history
+        chat_history.append({"role": "user", "parts": [body]})
+        chat_history.append({"role": "model", "parts": [output]})
+
+        # Save updated chat history
+        with open(history_file, 'w') as f:
+            json.dump(chat_history, f)
+
+ 
 
 
 
