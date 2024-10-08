@@ -7,6 +7,7 @@ from flask import Flask, request, jsonify
 
 import json
 import google.generativeai as genai
+from groq import Groq
 
 
 
@@ -107,14 +108,10 @@ def handle_incoming_message():
     print(message)
     print("Processing message:", message)
 
-    # Extract 'body' from the message
-    #body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
-
     try:
+        # Attempt to extract 'body' from the message
         body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
         print(f"Message body: {body}")
-
-
 
         # Extract 'wa_id' from the contact
         wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
@@ -129,27 +126,18 @@ def handle_incoming_message():
         else:
             chat_history = []
 
-
-
-
-        
-        from groq import Groq
-
-        # Add your API key here
+        # Instantiate the Groq client with the API key
         api_key = "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"
-
-        # Instantiate the client with the API key
         client = Groq(api_key=api_key)
 
-        # Store the output in a variable
+        # Prepare and send the request to the model
         output = ""
-
         completion = client.chat.completions.create(
             model="llama-3.2-11b-text-preview",
             messages=[
                 {
                     "role": "system",
-                    "content": "write a well detailed system instruction to achieve for what this user wants to achieve."
+                    "content": "write a well detailed system instruction to achieve what this user wants to achieve."
                 },
                 {
                     "role": "user",
@@ -163,13 +151,11 @@ def handle_incoming_message():
             stop=None,
         )
 
-        # Append the output to the variable
+        # Append the output from the model
         for chunk in completion:
             output += chunk.choices[0].delta.content or ""
 
-        # Now `output` holds the response from the model
-        print(f"this is the user input:  {output}")
-
+        print(f"Generated output: {output}")
 
         # Send response back to WhatsApp
         url = "https://graph.facebook.com/v20.0/396015606935687/messages"
@@ -189,46 +175,11 @@ def handle_incoming_message():
 
         response = requests.post(url, headers=headers, json=data)
 
-
-
-
-
-        from groq import Groq
-
-        # Add your API key here
-        api_key = "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"
-
-        # Instantiate the client with the API key
-        client = Groq(api_key=api_key)
-
-        # Store the output in a variable
-        output = ""
-
-        completion = client.chat.completions.create(
-            model="llama-3.2-11b-text-preview",
-            messages=[
-                {
-                    "role": "system",
-                    "content": output
-                },
-                {
-                    "role": "user",
-                    "content": f"{body}"
-                }
-            ],
-            temperature=1,
-            max_tokens=1024,
-            top_p=1,
-            stream=True,
-            stop=None,
-        )
-
-        # Append the output to the variable
-        for chunk in completion:
-            output += chunk.choices[0].delta.content or ""
-
-
-
+        # Check if the request was successful
+        if response.status_code == 200:
+            print("Message sent successfully.")
+        else:
+            print(f"Failed to send message: {response.status_code}, {response.text}")
 
         # Update chat history
         chat_history.append({"role": "user", "parts": [body]})
@@ -238,20 +189,13 @@ def handle_incoming_message():
         with open(history_file, 'w') as f:
             json.dump(chat_history, f)
 
- 
-
     except (KeyError, IndexError) as e:
-        print(f"Error accessing message body: {e}")
-        # You can set body to None or handle the case however you want
-        body = None
-
-
-
-
-
-
-
-
+        print(f"Error accessing message body or wa_id: {e}")
+        # Handle the case where the message structure is not as expected
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending WhatsApp message: {e}")
+    except Exception as e:
+        print(f"Unexpected error occurred: {e}")
 
     return "OK", 200
 
