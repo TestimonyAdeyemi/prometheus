@@ -109,6 +109,7 @@ MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 def handle_incoming_message():
 
     message = request.get_json()
+    print(message)
 
 
 
