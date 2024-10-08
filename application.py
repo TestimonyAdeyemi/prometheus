@@ -173,6 +173,49 @@ def handle_incoming_message():
 
     response = requests.post(url, headers=headers, json=data)
 
+
+
+    from groq import Groq
+
+    # Add your API key here
+    api_key = "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"
+
+    # Instantiate the client with the API key
+    client = Groq(api_key=api_key)
+
+    # Store the output in a variable
+    output = ""
+
+    completion = client.chat.completions.create(
+        model="llama-3.2-11b-text-preview",
+        messages=[
+            {
+                "role": "system",
+                "content": "what is the mood of this message, 1. sad, 2. angry 3.happy 4. Neutral.\nReply me only with a number between 1 and 4. Do not give any explanations."
+            },
+            {
+                "role": "user",
+                "content": body
+            }
+        ],
+        temperature=1,
+        max_tokens=1024,
+        top_p=1,
+        stream=True,
+        stop=None,
+    )
+
+    # Append the output to the variable
+    for chunk in completion:
+        output += chunk.choices[0].delta.content or ""
+
+    # Now `output` holds the response from the model
+    print(f"user mood of {output}")
+
+
+
+
+
     return "OK", 200
 
 if __name__ == "__main__":
