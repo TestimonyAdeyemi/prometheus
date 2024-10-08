@@ -116,29 +116,31 @@ def handle_incoming_message():
     if "messages" in message["entry"][0]["changes"][0]["value"]:
         body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
         wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
+
+
+           
+        # Send response back to WhatsApp
+        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+        headers = {
+            "Authorization": "Bearer EAAPPDu1MMoEBO2TZAxphoxNidaagIIpn9ZCeq4nkv6gM61KVw5DrsnCY5zEGpZBAHPhc9IWfWx445fJLA1zOEyClbdvzDVwDOL6kehIy3UyWiQnJczV3M6QtOA3fLElalNhFVwjPnU5W6aCxnnM1ICeQSwdszAmcTsuxZAKJN54gvWJV0T1l0YZBNWzA5643U4eZB1SLr3ZClZCXWdZCy8VzgevvZCZBnxRk8EFZCsdAftMJX3MZD",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "messaging_product": "whatsapp",
+            "to": wa_id,
+            "type": "text",
+            "text": {
+                "body": body
+            }
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+
+
+
     else:
         pass
-        
-        
-   
-    # Send response back to WhatsApp
-    url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-    headers = {
-        "Authorization": "Bearer EAAPPDu1MMoEBO2TZAxphoxNidaagIIpn9ZCeq4nkv6gM61KVw5DrsnCY5zEGpZBAHPhc9IWfWx445fJLA1zOEyClbdvzDVwDOL6kehIy3UyWiQnJczV3M6QtOA3fLElalNhFVwjPnU5W6aCxnnM1ICeQSwdszAmcTsuxZAKJN54gvWJV0T1l0YZBNWzA5643U4eZB1SLr3ZClZCXWdZCy8VzgevvZCZBnxRk8EFZCsdAftMJX3MZD",
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "messaging_product": "whatsapp",
-        "to": wa_id,
-        "type": "text",
-        "text": {
-            "body": body
-        }
-    }
-
-    response = requests.post(url, headers=headers, json=data)
-
 
 
 
