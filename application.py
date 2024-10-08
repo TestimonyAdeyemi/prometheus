@@ -108,7 +108,7 @@ def handle_incoming_message():
     print("Processing message:", message)
 
     # Extract 'body' from the message
-    body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+    #body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
 
     try:
         body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
@@ -149,7 +149,7 @@ def handle_incoming_message():
             messages=[
                 {
                     "role": "system",
-                    "content": "write a well detailed prompt instruction to train an ai for what this user wants to achieve."
+                    "content": "write a well detailed system instruction to achieve for what this user wants to achieve."
                 },
                 {
                     "role": "user",
@@ -230,13 +230,6 @@ def handle_incoming_message():
 
 
 
-
-
-
-
-
-
-
         # Update chat history
         chat_history.append({"role": "user", "parts": [body]})
         chat_history.append({"role": "model", "parts": [output]})
@@ -246,9 +239,6 @@ def handle_incoming_message():
             json.dump(chat_history, f)
 
  
-
-
-
 
     except (KeyError, IndexError) as e:
         print(f"Error accessing message body: {e}")
