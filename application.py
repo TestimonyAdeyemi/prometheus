@@ -110,89 +110,103 @@ def handle_incoming_message():
     # Extract 'body' from the message
     body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
 
-    # Extract 'wa_id' from the contact
-    wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
-
-    # File path for user history
-    history_file = f"user_{wa_id}_history.json"
-
-    # Check if user history exists
-    if os.path.exists(history_file):
-        with open(history_file, 'r') as f:
-            chat_history = json.load(f)
-    else:
-        chat_history = []
+    try:
+        body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+        print(f"Message body: {body}")
 
 
 
+        # Extract 'wa_id' from the contact
+        wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
-    
-    from groq import Groq
+        # File path for user history
+        history_file = f"user_{wa_id}_history.json"
 
-    # Add your API key here
-    api_key = "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"
-
-    # Instantiate the client with the API key
-    client = Groq(api_key=api_key)
-
-    # Store the output in a variable
-    output = ""
-
-    completion = client.chat.completions.create(
-        model="llama-3.2-11b-text-preview",
-        messages=[
-            {
-                "role": "system",
-                "content": "what is the mood of this message, 1. sad, 2. angry 3.happy 4. Neutral.\nReply me only with a number between 1 and 4. Do not give any explanations."
-            },
-            {
-                "role": "user",
-                "content": body
-            }
-        ],
-        temperature=1,
-        max_tokens=1024,
-        top_p=1,
-        stream=True,
-        stop=None,
-    )
-
-    # Append the output to the variable
-    for chunk in completion:
-        output += chunk.choices[0].delta.content or ""
-
-    # Now `output` holds the response from the model
-    print(f"user mood of {output}")
+        # Check if user history exists
+        if os.path.exists(history_file):
+            with open(history_file, 'r') as f:
+                chat_history = json.load(f)
+        else:
+            chat_history = []
 
 
 
 
-    # Update chat history
-    chat_history.append({"role": "user", "parts": [body]})
-    chat_history.append({"role": "model", "parts": [response.text]})
+        
+        from groq import Groq
 
-    # Save updated chat history
-    with open(history_file, 'w') as f:
-        json.dump(chat_history, f)
+        # Add your API key here
+        api_key = "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"
 
-    # Send response back to WhatsApp
-    url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-    headers = {
-        "Authorization": "Bearer EAAPPDu1MMoEBOy8xa6fZAG8p7JJiDa3ZCX6pVT0qCKkZCENnCZAmdpLcVtbkeLOhINaRcV4NUvNHd3RZAdKnBFTNbgQ9CwaQP5rZBLeCpVeLIA6fv0AvoshJdm8IwTBiKbVBljKwXKVD3jZCmEdOfC9Gg5RumUJu41iQU3GaDZCxfUsZAsLYaVeyle25YWEOBwUsc5eT7kAZBt2uzZCxvDHmwf6OYCnqd8NTrbDS3XyuHvV4qoZD",
-        "Content-Type": "application/json"
-    }
+        # Instantiate the client with the API key
+        client = Groq(api_key=api_key)
 
-    data = {
-        "messaging_product": "whatsapp",
-        "to": wa_id,
-        "type": "text",
-        "text": {
-            "body": output
+        # Store the output in a variable
+        output = ""
+
+        completion = client.chat.completions.create(
+            model="llama-3.2-11b-text-preview",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "what is the mood of this message, 1. sad, 2. angry 3.happy 4. Neutral.\nReply me only with a number between 1 and 4. Do not give any explanations."
+                },
+                {
+                    "role": "user",
+                    "content": body
+                }
+            ],
+            temperature=1,
+            max_tokens=1024,
+            top_p=1,
+            stream=True,
+            stop=None,
+        )
+
+        # Append the output to the variable
+        for chunk in completion:
+            output += chunk.choices[0].delta.content or ""
+
+        # Now `output` holds the response from the model
+        print(f"user mood of {output}")
+
+
+
+
+        # Update chat history
+        chat_history.append({"role": "user", "parts": [body]})
+        chat_history.append({"role": "model", "parts": [output]})
+
+        # Save updated chat history
+        with open(history_file, 'w') as f:
+            json.dump(chat_history, f)
+
+        # Send response back to WhatsApp
+        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+        headers = {
+            "Authorization": "Bearer EAAPPDu1MMoEBOy8xa6fZAG8p7JJiDa3ZCX6pVT0qCKkZCENnCZAmdpLcVtbkeLOhINaRcV4NUvNHd3RZAdKnBFTNbgQ9CwaQP5rZBLeCpVeLIA6fv0AvoshJdm8IwTBiKbVBljKwXKVD3jZCmEdOfC9Gg5RumUJu41iQU3GaDZCxfUsZAsLYaVeyle25YWEOBwUsc5eT7kAZBt2uzZCxvDHmwf6OYCnqd8NTrbDS3XyuHvV4qoZD",
+            "Content-Type": "application/json"
         }
-    }
 
-    response = requests.post(url, headers=headers, json=data)
+        data = {
+            "messaging_product": "whatsapp",
+            "to": wa_id,
+            "type": "text",
+            "text": {
+                "body": output
+            }
+        }
 
+        response = requests.post(url, headers=headers, json=data)
+
+
+
+
+
+    except (KeyError, IndexError) as e:
+        print(f"Error accessing message body: {e}")
+        # You can set body to None or handle the case however you want
+        body = None
 
 
 
