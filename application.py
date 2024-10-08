@@ -115,14 +115,11 @@ def handle_incoming_message():
      # Extract the list of messages if it exists
     if "messages" in message["entry"][0]["changes"][0]["value"]:
         body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+        wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
     else:
-        messages = []
-
-    wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
-
-    
-    
-   
+        pass
+        
+        
    
     # Send response back to WhatsApp
     url = "https://graph.facebook.com/v20.0/396015606935687/messages"
