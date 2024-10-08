@@ -100,102 +100,17 @@ def validate_request():
 
 MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 
+
+
+
+
 @app.route("/whatsapp", methods=["POST"])
 
 def handle_incoming_message():
-    # If the request passes validation, process it here
+
     message = request.get_json()
     print(message)
     print("Processing message:", message)
-
-    try:
-        # Attempt to extract 'body' from the message
-        body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
-        print(f"Message body: {body}")
-
-        # Extract 'wa_id' from the contact
-        wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
-
-        # File path for user history
-        history_file = f"user_{wa_id}_history.json"
-
-        # Check if user history exists
-        if os.path.exists(history_file):
-            with open(history_file, 'r') as f:
-                chat_history = json.load(f)
-        else:
-            chat_history = []
-
-        # Instantiate the Groq client with the API key
-        api_key = "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"
-        client = Groq(api_key=api_key)
-
-        # Prepare and send the request to the model
-        output = ""
-        completion = client.chat.completions.create(
-            model="llama-3.2-11b-text-preview",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "write a well detailed system instruction to achieve what this user wants to achieve."
-                },
-                {
-                    "role": "user",
-                    "content": f"{body}"
-                }
-            ],
-            temperature=1,
-            max_tokens=1024,
-            top_p=1,
-            stream=True,
-            stop=None,
-        )
-
-        # Append the output from the model
-        for chunk in completion:
-            output += chunk.choices[0].delta.content or ""
-
-        print(f"Generated output: {output}")
-
-        # Send response back to WhatsApp
-        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-        headers = {
-            "Authorization": "Bearer EAAPPDu1MMoEBOy8xa6fZAG8p7JJiDa3ZCX6pVT0qCKkZCENnCZAmdpLcVtbkeLOhINaRcV4NUvNHd3RZAdKnBFTNbgQ9CwaQP5rZBLeCpVeLIA6fv0AvoshJdm8IwTBiKbVBljKwXKVD3jZCmEdOfC9Gg5RumUJu41iQU3GaDZCxfUsZAsLYaVeyle25YWEOBwUsc5eT7kAZBt2uzZCxvDHmwf6OYCnqd8NTrbDS3XyuHvV4qoZD",
-            "Content-Type": "application/json"
-        }
-
-        data = {
-            "messaging_product": "whatsapp",
-            "to": wa_id,
-            "type": "text",
-            "text": {
-                "body": output
-            }
-        }
-
-        response = requests.post(url, headers=headers, json=data)
-
-        # Check if the request was successful
-        if response.status_code == 200:
-            print("Message sent successfully.")
-        else:
-            print(f"Failed to send message: {response.status_code}, {response.text}")
-
-        # Update chat history
-        chat_history.append({"role": "user", "parts": [body]})
-        chat_history.append({"role": "model", "parts": [output]})
-
-        # Save updated chat history
-        with open(history_file, 'w') as f:
-            json.dump(chat_history, f)
-
-    except (KeyError, IndexError) as e:
-        print(f"Error accessing message body or wa_id: {e}")
-        # Handle the case where the message structure is not as expected
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending WhatsApp message: {e}")
-    except Exception as e:
-        print(f"Unexpected error occurred: {e}")
 
     return "OK", 200
 
