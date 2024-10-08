@@ -104,6 +104,7 @@ MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 def handle_incoming_message():
     # If the request passes validation, process it here
     message = request.get_json()
+    print(message)
     print("Processing message:", message)
 
     # Extract 'body' from the message
