@@ -307,7 +307,7 @@ def handle_incoming_message():
                             else:
                                 chat_history = []
                                 chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your user want and tell them what it would look like."})
-                                chat_history.append({"role": "system", "content": body})
+                                chat_history.append({"role": "user", "content": body})
 
 
                             
@@ -432,6 +432,41 @@ def handle_incoming_message():
 
 
 
+                                chat_history.append({"role": "user", "content": "reply with one word, pictures of what should be on the website? "})
+                            
+                                from groq import Groq
+
+                                # Add your API key here
+                                api_key = "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"
+
+                                # Instantiate the client with the API key
+                                client = Groq(api_key=api_key)
+
+                                # Store the output in a variable
+                                query = ""
+
+                                completion = client.chat.completions.create(
+                                    model="llama-3.2-11b-text-preview",
+                                    messages=
+                                        chat_history
+                            ,
+                                    temperature=1,
+                                    max_tokens=1024,
+                                    top_p=1,
+                                    stream=True,
+                                    stop=None,
+                                )
+
+                                # Append the output to the variable
+                                for chunk in completion:
+                                    query += chunk.choices[0].delta.content or ""
+
+                                # Now `output` holds the response from the model
+                                print(query)
+
+
+
+
                                 
                                 import requests
 
@@ -454,6 +489,26 @@ def handle_incoming_message():
                                 image_links = get_image_links(object_query, access_key)
                                 for link in image_links:
                                     print(link)
+                                    
+
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "I just finished downloading the images for your website, I am moving to coding now..."
+                                    }
+                                }
+
+                                response = requests.post(url, headers=headers, json=data)
+                                
+
 
 
 
