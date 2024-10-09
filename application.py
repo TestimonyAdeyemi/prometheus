@@ -309,8 +309,8 @@ def handle_incoming_message():
                             intent_history = chat_history
                             intent_history = []
 
-                            intent_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1 website or 2 AI chatbot 3 None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3"}) 
-
+                            intent_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1. website or 2. AI chatbot 3. None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3"}) 
+                            print("model is not giving the right reply")
 
                             from groq import Groq
 
