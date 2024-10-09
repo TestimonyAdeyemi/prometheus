@@ -346,7 +346,7 @@ def handle_incoming_message():
                                 model_output += chunk.choices[0].delta.content or ""
 
                             # Now `output` holds the response from the model
-                            print(output)
+                            print(model_output)
                             
                             # Update chat history
                             chat_history.append({"role": "user", "content": body})    # 'body' is a string
