@@ -350,7 +350,7 @@ def handle_incoming_message():
                             with open(history_file, 'w') as f:
                                 json.dump(chat_history, f)
 
-
+                            import requests
                             
                             # Send response back to WhatsApp
                             url = "https://graph.facebook.com/v20.0/396015606935687/messages"
@@ -406,6 +406,7 @@ def handle_incoming_message():
 
 
                             if output == "1":
+                                import requests
 
                                 url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                                 headers = {
@@ -490,7 +491,10 @@ def handle_incoming_message():
                                 for link in image_links:
                                     print(link)
                                     
+                                import requests
 
+
+                                #keeping user in loop
                                 url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                                 headers = {
                                     "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
