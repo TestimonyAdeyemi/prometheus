@@ -306,7 +306,7 @@ def handle_incoming_message():
                                     chat_history = json.load(f)
                             else:
                                 chat_history = []
-                                chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your user want and tell them what it would look like."})
+                                chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your user want and tell them what it would look like. Don't ask questions"})
                                 chat_history.append({"role": "user", "content": body})
 
 
@@ -488,8 +488,9 @@ def handle_incoming_message():
                                 object_query =  query
                                 access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
                                 image_links = get_image_links(object_query, access_key)
-                                for link in image_links:
-                                    print(link)
+                                print(image_links)
+                                # for link in image_links:
+                                #     print(link)
                                     
                                 import requests
 
@@ -511,6 +512,9 @@ def handle_incoming_message():
                                 }
 
                                 response = requests.post(url, headers=headers, json=data)
+
+
+
 
 
 
