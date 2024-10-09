@@ -256,7 +256,7 @@ def validate_request():
             if (display_phone_number != ALLOWED_DISPLAY_PHONE_NUMBER or 
                 phone_number_id != ALLOWED_PHONE_NUMBER_ID):
                 print(f"Rejected request from display number: {display_phone_number}, phone ID: {phone_number_id}")
-                #return jsonify({"error": "Forbidden"}), 403  # Reject the request early
+                return jsonify({"error": "Forbidden"}), 403  # Reject the request early
             
         except Exception as e:
             print(f"Error during request validation: {e}")
@@ -264,8 +264,6 @@ def validate_request():
 
 
 MY_BUSINESS_PHONE_NUMBER = "2347070471117"
-
-
 
 
 
