@@ -337,8 +337,8 @@ def handle_incoming_message():
                         print(output)
                         
                          # Update chat history
-                        chat_history.append({"role": "user", "content": [body]})
-                        chat_history.append({"role": "assistant", "content": [output]})
+                        chat_history.append({"role": "user", "content": body})    # 'body' is a string
+                        chat_history.append({"role": "assistant", "content": output})
                         print(chat_history)
 
                         # Save updated chat history
