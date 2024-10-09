@@ -118,7 +118,6 @@ def handle_incoming_message():
     if "messages" in message["entry"][0]["changes"][0]["value"]:
         if "text" in message['entry'][0]['changes'][0]['value']['messages'][0]:
             body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
-            print(body)
             if body: 
                 wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
