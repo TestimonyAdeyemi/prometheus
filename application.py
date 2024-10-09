@@ -366,8 +366,10 @@ def handle_incoming_message():
                                 }
                             }
 
+                            response = requests.post(url, headers=headers, json=data)
 
-                            chat_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1. website or 2. AI chatbot 3. None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3"}) 
+
+                            chat_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1. website or 2. AI chatbot 3. None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3. Reply with 1 2 or 3, nothing else just the numbers"}) 
                             print("model is not giving the right reply")
 
                             from groq import Groq
@@ -402,7 +404,7 @@ def handle_incoming_message():
 
 
                             if output == "1":
-                                
+
                                 url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                                 headers = {
                                     "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
@@ -419,18 +421,6 @@ def handle_incoming_message():
                                 }
 
                                 response = requests.post(url, headers=headers, json=data)
-
-
-
-
-
-
-                   
-
-
-
-                        
-
 
                     # No else case, just ignore if the text/body isn't present
     except (KeyError, IndexError) as e:
