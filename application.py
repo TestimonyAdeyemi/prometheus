@@ -350,7 +350,7 @@ def handle_incoming_message():
                         # Send response back to WhatsApp
                         url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                         headers = {
-                            "Authorization": "Bearer EAAPPDu1MMoEBOyQxb45z2GZBCLFTczncho2iSZAMrkTdWGnjRZBhk1kDJFDAI7WC10t32DIJ02MxZCc5tvWHKTXrDMpjgQt1sevzN3kEJXoNZAzQ95nDSphvyWbkiK9mPUl2VbyGcgvZByXdgLVp20pfZCn8vOfZCmEu2AGHFOUS34CZBv399AU3e6ZC1lLYQERfm4zT3NGNFYGAdTvJ6WvXCLDHBWlTZAIuqvW8IPAnDOnCgYZD",
+                            "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
                             "Content-Type": "application/json"
                         }
 
@@ -364,6 +364,9 @@ def handle_incoming_message():
                         }
 
                         response = requests.post(url, headers=headers, json=data)
+
+
+
 
 
 
