@@ -314,7 +314,7 @@ def handle_incoming_message():
                             from groq import Groq
 
                             # Add your API key here
-                            api_key = "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"
+                            api_key = "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"
 
                             # Instantiate the client with the API key
                             client = Groq(api_key=api_key)
@@ -377,7 +377,7 @@ def handle_incoming_message():
                             from groq import Groq
 
                             # Add your API key here
-                            api_key = "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"
+                            api_key = "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"
 
                             # Instantiate the client with the API key
                             client = Groq(api_key=api_key)
@@ -438,7 +438,7 @@ def handle_incoming_message():
                                 from groq import Groq
 
                                 # Add your API key here
-                                api_key = "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"
+                                api_key = "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"
 
                                 # Instantiate the client with the API key
                                 client = Groq(api_key=api_key)
@@ -525,7 +525,7 @@ def handle_incoming_message():
                                 from groq import Groq
 
                                 # Add your API key here
-                                api_key = "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"
+                                api_key = "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"
 
                                 # Instantiate the client with the API key
                                 client = Groq(api_key=api_key)
@@ -603,7 +603,7 @@ def handle_incoming_message():
                                 from groq import Groq
 
                                 # Add your API key here
-                                api_key = "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"
+                                api_key = "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"
 
                                 # Instantiate the client with the API key
                                 client = Groq(api_key=api_key)
