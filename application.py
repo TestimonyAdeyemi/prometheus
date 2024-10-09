@@ -557,6 +557,8 @@ def handle_incoming_message():
                             #     for chunk in completion:
                             #         html_output += chunk.choices[0].delta.content or ""
 
+                                
+                                import google.generativeai as genai
                                 genai.configure(api_key="AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8")
 
                                 # Set up the model
