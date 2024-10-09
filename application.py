@@ -369,7 +369,7 @@ def handle_incoming_message():
 
 
                         intent_history = chat_history
-                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, one stands for yes the user has approved the solution and building should start, No is we still need to clarify a few things before we start. Give no explanations for your answer, reply with 1 or 0"}) 
+                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, 1 stands for yes the user has approved the solution and building should start, No is we still need to clarify a few things before we start  and the user hasnt given a clear go ahead yet. Give no explanations for your answer, reply with 1 or 0"}) 
 
                         from groq import Groq
 
@@ -400,6 +400,26 @@ def handle_incoming_message():
 
                         # Now `output` holds the response from the model
                         print(f" Build intent is: {intent}")
+
+                        if intent == "1":
+                            # Send response back to WhatsApp
+                            url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                            headers = {
+                                "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                "Content-Type": "application/json"
+                            }
+
+                            data = {
+                                "messaging_product": "whatsapp",
+                                "to": wa_id,
+                                "type": "text",
+                                "text": {
+                                    "body": "Buiding has started..."
+                                }
+                            }
+
+                            response = requests.post(url, headers=headers, json=data)
+
 
 
 
