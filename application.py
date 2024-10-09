@@ -741,7 +741,7 @@ def handle_incoming_message():
                                         print(f"Error message: {response.text}")
 
                                 # Usage
-                                access_token = "nfp_Sa6YsF9rQupTDiLP4JVVWGijzbX7D3Qc8256"
+                                access_token = "nfp_4uUmEKzfAsAa1dmVYedSeebLDEw6DKmT49a8"
                                 directory_path = "website"
                                 site_name = "my-awesome-site"  # Optional: Provide a name to create a new site
 
