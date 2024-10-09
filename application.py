@@ -270,8 +270,6 @@ MY_BUSINESS_PHONE_NUMBER = "2347070471117"
 @app.route("/whatsapp", methods=["POST"])
 
 
-
-
 def handle_incoming_message():
     message = request.get_json()
     # Extract text message and sender's number, ignore if conditions aren't met
@@ -292,9 +290,7 @@ def handle_incoming_message():
                     if 'text' in messages[0] and 'body' in messages[0]['text']:
                         body = messages[0]['text']['body']
                         wa_id = contacts[0]['wa_id']
-                        print(f"Message body: {body}")
-                        print(f"Sender's number: {wa_id}")
-
+                        
 
                         # File path for user history
                         history_file = f"user_{wa_id}_history.json"
@@ -343,7 +339,14 @@ def handle_incoming_message():
 
                         # Now `output` holds the response from the model
                         print(output)
+                        
+                         # Update chat history
+                        chat_history.append({"role": "user", "parts": [body]})
+                        chat_history.append({"role": "model", "parts": [response.text]})
 
+                        # Save updated chat history
+                        with open(history_file, 'w') as f:
+                            json.dump(chat_history, f)
 
 
                         
@@ -367,13 +370,7 @@ def handle_incoming_message():
 
 
 
-                        # Update chat history
-                        chat_history.append({"role": "user", "parts": [body]})
-                        chat_history.append({"role": "model", "parts": [response.text]})
-
-                        # Save updated chat history
-                        with open(history_file, 'w') as f:
-                            json.dump(chat_history, f)
+                       
 
 
                     # No else case, just ignore if the text/body isn't present
