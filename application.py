@@ -380,7 +380,7 @@ def handle_incoming_message():
                         client = Groq(api_key=api_key)
 
                         # Store the output in a variable
-                        output = ""
+                        intent = ""
 
                         completion = client.chat.completions.create(
                             model="llama-3.2-11b-text-preview",
