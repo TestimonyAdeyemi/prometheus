@@ -341,7 +341,7 @@ def handle_incoming_message():
                             output = ""
 
                             completion = client.chat.completions.create(
-                                model="llama-3.2-11b-text-preview",
+                                model="gemma-7b-it",
                                 messages=
                                     intent_history
                         ,
