@@ -294,22 +294,22 @@ def handle_incoming_message():
 
                         if body == "yes":
 
-                            url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-                            headers = {
-                                "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
-                                "Content-Type": "application/json"
-                            }
+                            # url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                            # headers = {
+                            #     "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                            #     "Content-Type": "application/json"
+                            # }
 
-                            data = {
-                                "messaging_product": "whatsapp",
-                                "to": wa_id,
-                                "type": "text",
-                                "text": {
-                                    "body": "Buiding has started... I will build your website as you instructed. When I'm done, I will send you the link to it."
-                                }
-                            }
+                            # data = {
+                            #     "messaging_product": "whatsapp",
+                            #     "to": wa_id,
+                            #     "type": "text",
+                            #     "text": {
+                            #         "body": "Buiding has started... I will build your website as you instructed. When I'm done, I will send you the link to it."
+                            #     }
+                            # }
 
-                            response = requests.post(url, headers=headers, json=data)
+                            # response = requests.post(url, headers=headers, json=data)
 
                             print("building starts....")
                             # File path for user history
@@ -343,7 +343,7 @@ def handle_incoming_message():
                             completion = client.chat.completions.create(
                                 model="llama-3.2-11b-text-preview",
                                 messages=
-                                    chat_history
+                                    intent_history
                         ,
                                 temperature=1,
                                 max_tokens=1024,
