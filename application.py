@@ -173,7 +173,7 @@ from flask import Flask, request, jsonify
 import json
 import google.generativeai as genai
 from groq import Groq
-
+import google.generativeai as genai
 
 global handled_messages
 handled_messages = set()
