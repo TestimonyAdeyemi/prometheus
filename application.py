@@ -369,7 +369,7 @@ def handle_incoming_message():
 
 
                         intent_history = chat_history
-                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, 1 stands for yes the user has approved the plan for building and building should start, No is you still need to clarify a few things before we start. Give no explanations for your answer, reply with 1 or 0"}) 
+                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now does it have all the information it needs to build right now..., reply with 1 or 0, 1 stands for yes building should start, No is you still need to clarify a few things before we start. Give no explanations for your answer, reply with 1 or 0"}) 
 
                         from groq import Groq
 
@@ -414,7 +414,7 @@ def handle_incoming_message():
                                 "to": wa_id,
                                 "type": "text",
                                 "text": {
-                                    "body": "Buiding has started... I will train your AI and build a website for it. When I done, I will send you a message."
+                                    "body": "Buiding has started... I will train your AI and build a website for you to access. When I'm done, I will send you a message."
                                 }
                             }
 
