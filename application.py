@@ -116,7 +116,7 @@ def handle_incoming_message():
 
      # Extract the list of messages if it exists
     if "messages" in message["entry"][0]["changes"][0]["value"]:
-        if "text" in message["entry"][0]["changes"][0]["value"][0]["messages"]:
+        if "text" in message['entry'][0]['changes'][0]['value']['messages'][0]:
             body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
             print(body)
             if body: 
