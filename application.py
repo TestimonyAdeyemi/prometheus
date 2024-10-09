@@ -369,7 +369,7 @@ def handle_incoming_message():
 
 
                         intent_history = chat_history
-                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, 1 stands for yes the user has approved the solution and building should start, No is we still need to clarify a few things before we start  and the user hasnt given a clear go ahead yet. Give no explanations for your answer, reply with 1 or 0"}) 
+                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, 1 stands for yes the user has approved the plan for building and building should start, No is you still need to clarify a few things before we start. Give no explanations for your answer, reply with 1 or 0"}) 
 
                         from groq import Groq
 
