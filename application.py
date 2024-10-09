@@ -116,10 +116,11 @@ def handle_incoming_message():
 
      # Extract the list of messages if it exists
     if "messages" in message["entry"][0]["changes"][0]["value"]:
-        body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
-        print(body)
-        if body: 
-            wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
+        if "text" in message["entry"][0]["changes"][0]["value"][0]["messages"]:
+            body = message['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']
+            print(body)
+            if body: 
+                wa_id = message['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']
 
 
         # File path for user history
