@@ -672,7 +672,7 @@ def handle_incoming_message():
                                     js_file.write(js_output)
 
 
-
+                                deploy_url = ""
 
                                 import requests
                                 # Netlify API endpoint
@@ -734,23 +734,6 @@ def handle_incoming_message():
 
                                         import requests
 
-
-                                        #keeping user in loop
-                                        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-                                        headers = {
-                                            "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
-                                            "Content-Type": "application/json"
-                                        }
-
-                                        data = {
-                                            "messaging_product": "whatsapp",
-                                            "to": wa_id,
-                                            "type": "text",
-                                            "text": {
-                                                "body": deploy_url
-                                            }
-                                        }
-
                                         response = requests.post(url, headers=headers, json=data)
                                           # Open the URL in the default web browser
                                     else:
@@ -762,31 +745,25 @@ def handle_incoming_message():
                                 directory_path = "website"
                                 site_name = "my-awesome-site"  # Optional: Provide a name to create a new site
 
+
+
                                 deploy_to_netlify(access_token, directory_path, site_name)
 
+                                 #keeping user in loop
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
 
-                                
-                                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": deploy_url
+                                    }
+                                }
 
 
 
@@ -797,7 +774,7 @@ def handle_incoming_message():
 
 
 
-
+            
                     # No else case, just ignore if the text/body isn't present
     except (KeyError, IndexError) as e:
         pass  # Just ignore and do nothing
