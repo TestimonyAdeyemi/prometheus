@@ -319,9 +319,9 @@ def handle_incoming_message():
 
                         completion = client.chat.completions.create(
                             model="llama-3.2-11b-text-preview",
-                            messages=[
+                            messages=
                                 chat_history
-                            ],
+                    ,
                             temperature=1,
                             max_tokens=1024,
                             top_p=1,
