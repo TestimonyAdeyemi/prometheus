@@ -433,7 +433,7 @@ def handle_incoming_message():
 
 
 
-                                chat_history.append({"role": "user", "content": "reply with one word, pictures of what should be on the website? "})
+                                chat_history.append({"role": "user", "content": f"reply with one word, pictures of what should be on the website that this person wants to build? this s the user's input: {body}"})
                             
                                 from groq import Groq
 
@@ -511,6 +511,9 @@ def handle_incoming_message():
                                 }
 
                                 response = requests.post(url, headers=headers, json=data)
+
+
+
                                 
 
 
