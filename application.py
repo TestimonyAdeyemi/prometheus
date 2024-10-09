@@ -175,6 +175,10 @@ import google.generativeai as genai
 from groq import Groq
 
 
+global handled_messages
+handled_messages = set()
+
+
 
 
 
@@ -292,10 +296,9 @@ def handle_incoming_message():
                         wa_id = contacts[0]['wa_id']
 
 
-                        if body == "yes":
-
+                        if body in handled_messages:
                             print("breakpoint")
-
+                            pass
                         else:
                             # File path for user history
                             history_file = f"user_{wa_id}_history.json"
@@ -369,6 +372,7 @@ def handle_incoming_message():
                             }
 
                             response = requests.post(url, headers=headers, json=data)
+                            handled_messages.add(body)
 
 
                             chat_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1. website or 2. AI chatbot 3. None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3. Reply with 1 2 or 3, nothing else just the numbers"}) 
