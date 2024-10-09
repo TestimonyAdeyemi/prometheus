@@ -516,6 +516,178 @@ def handle_incoming_message():
 
 
 
+                                chat_history = []
+                                chat_history.append({"role": "system", "content": f"You are the best html website coder ever, you take a description of the website to build and you only reply with the detailed and complete html code to implement it. Here is the image url. I have the js file called script.js and css file called style.css files. Don't bother about them, focus on making the html as extensive and good as possible. Do not use external apis right now. Reply only with the html code, give no explanations.  Here are the image links to use in the builiding {image_links}"})
+                                chat_history.append({"role": "user", "content": body})
+
+
+                            
+                                from groq import Groq
+
+                                # Add your API key here
+                                api_key = "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"
+
+                                # Instantiate the client with the API key
+                                client = Groq(api_key=api_key)
+
+                                # Store the output in a variable
+                                html_output = ""
+
+                                completion = client.chat.completions.create(
+                                    model="llama-3.2-11b-text-preview",
+                                    messages=
+                                        chat_history
+                            ,
+                                    temperature=1,
+                                    max_tokens=1024,
+                                    top_p=1,
+                                    stream=True,
+                                    stop=None,
+                                )
+
+                                # Append the output to the variable
+                                for chunk in completion:
+                                    html_output += chunk.choices[0].delta.content or ""
+
+                                # Now `output` holds the response from the model
+                                print(html_output)
+
+
+                                chat_history = []
+                                chat_history.append({"role": "system", "content": f"You are the best css website coder ever, you take the html code {html_output} of the website we're building and write the css code to make it beautiful and you only reply with the detailed and complete css code to implement it. Here is the html code. I have the js file called script.js  Don't bother about it, focus on making the css as extensive and good as possible. Reply only with the css code, give no explanations."})
+                                chat_history.append({"role": "user", "content": "make the css compliment our website very well. make it look very nice and professional. Reply only with css code, do not give any explanations. Make the css code extensive."})
+
+
+                            
+                                from groq import Groq
+
+                                # Add your API key here
+                                api_key = "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"
+
+                                # Instantiate the client with the API key
+                                client = Groq(api_key=api_key)
+
+                                # Store the output in a variable
+                                css_output = ""
+
+                                completion = client.chat.completions.create(
+                                    model="llama-3.2-11b-text-preview",
+                                    messages=
+                                        chat_history
+                            ,
+                                    temperature=1,
+                                    max_tokens=1024,
+                                    top_p=1,
+                                    stream=True,
+                                    stop=None,
+                                )
+
+                                # Append the output to the variable
+                                for chunk in completion:
+                                    css_output += chunk.choices[0].delta.content or ""
+
+                                # Now `output` holds the response from the model
+                                print(css_output)
+
+
+
+
+
+
+
+                                chat_history = []
+                                chat_history.append({"role": "system", "content": f"You are the best js website coder ever, you take the html code {html_output} of the website we're building and write the js code to make it beautiful and well made and you only reply with the detailed and complete js code to implement it. Here is the html code. Reply only with the js code, give no explanations."})
+                                chat_history.append({"role": "user", "content": "make the js compliment our website very well. make it look very nice and professional. Reply only with js code, do not give any explanations. Make the js code extensive."})
+
+
+                                from groq import Groq
+
+                                # Add your API key here
+                                api_key = "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"
+
+                                # Instantiate the client with the API key
+                                client = Groq(api_key=api_key)
+
+                                # Store the output in a variable
+                                css_output = ""
+
+                                completion = client.chat.completions.create(
+                                    model="llama-3.2-11b-text-preview",
+                                    messages=
+                                        chat_history
+                            ,
+                                    temperature=1,
+                                    max_tokens=1024,
+                                    top_p=1,
+                                    stream=True,
+                                    stop=None,
+                                )
+
+                                # Append the output to the variable
+                                for chunk in completion:
+                                    js_output += chunk.choices[0].delta.content or ""
+
+                                # Now `output` holds the response from the model
+                                print(js_output)
+
+
+
+                                import requests
+
+
+                                #keeping user in loop
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "I have generated the code, now deploying...."
+                                    }
+                                }
+
+                                response = requests.post(url, headers=headers, json=data)
+
+
+
+
+                                # # Create directories for files if they don't exist
+                                # os.makedirs("website", exist_ok=True)
+
+                                # # Write HTML content to a file
+                                # with open("website/index.html", "w") as html_file:
+                                #     html_file.write(html_output)
+
+                                # # Write CSS content to a file
+                                # with open("website/style.css", "w") as css_file:
+                                #     css_file.write(css_output)
+
+                                # # Write JavaScript content to a file
+                                # with open("website/script.js", "w") as js_file:
+                                #     js_file.write(js_output)
+                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                                 
