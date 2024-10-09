@@ -307,6 +307,8 @@ def handle_incoming_message():
                             else:
                                 chat_history = []
                                 chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them."})
+                                chat_history.append({"role": "system", "content": body})
+
 
                             
                             from groq import Groq
@@ -384,7 +386,7 @@ def handle_incoming_message():
                             output = ""
 
                             completion = client.chat.completions.create(
-                                model="gemma-7b-it",
+                                model="llama-3.2-11b-text-preview",
                                 messages=
                                     chat_history
                         ,
@@ -423,7 +425,38 @@ def handle_incoming_message():
                                 response = requests.post(url, headers=headers, json=data)
 
 
+                                from googlesearch import search
+                                from bs4 import BeautifulSoup
+                                import requests
+
+
+
+
                                 
+                                import requests
+
+                                def get_image_links(query, access_key, num_links=5):
+                                    image_links = []
+                                    # Construct the API request
+                                    url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
+                                    # Send the request
+                                    response = requests.get(url)
+                                    # Parse the JSON response
+                                    data = response.json()
+                                    # Extract image links
+                                    for result in data["results"]:
+                                        image_links.append(result["urls"]["full"])
+                                    return image_links
+
+                                # Example usage:
+                                object_query =  query
+                                access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
+                                image_links = get_image_links(object_query, access_key)
+                                for link in image_links:
+                                    print(link)
+
+
+
 
 
 
