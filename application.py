@@ -301,6 +301,9 @@ def handle_incoming_message():
                                 chat_history = json.load(f)
                         else:
                             chat_history = []
+                            chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a an AI engineer that builds chatbots. What makes you special is that you actually automatically build AIs just by text, you are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them. \n\nAlways have the following 4 things:\n1. Your user's name\n2. The name of the AI your user wants to build\n3. What the AI should be able to do?\n4. Where to access the AI, website or whatsapp\n\nYour personality is friendly, kind and helpful. "
+                        })
+
 
 
                         from groq import Groq
@@ -317,14 +320,7 @@ def handle_incoming_message():
                         completion = client.chat.completions.create(
                             model="llama-3.2-11b-text-preview",
                             messages=[
-                                {
-                                    "role": "system",
-                                    "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a an AI engineer that builds chatbots. What makes you special is that you actually automatically build AIs just by text, you are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them. \n\nAlways have the following 4 things:\n1. Your user's name\n2. The name of the AI your user wants to build\n3. What the AI should be able to do?\n4. Where to access the AI, website or whatsapp\n\nYour personality is friendly, kind and helpful. "
-                        },
-                                {
-                                    "role": "user",
-                                    "content": body
-                                }
+                                chat_history
                             ],
                             temperature=1,
                             max_tokens=1024,
@@ -343,6 +339,7 @@ def handle_incoming_message():
                          # Update chat history
                         chat_history.append({"role": "user", "content": [body]})
                         chat_history.append({"role": "assistant", "content": [output]})
+                        print(chat_history)
 
                         # Save updated chat history
                         with open(history_file, 'w') as f:
