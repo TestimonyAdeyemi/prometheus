@@ -341,8 +341,8 @@ def handle_incoming_message():
                         print(output)
                         
                          # Update chat history
-                        chat_history.append({"role": "user", "parts": [body]})
-                        chat_history.append({"role": "model", "parts": [output]})
+                        chat_history.append({"role": "user", "content": [body]})
+                        chat_history.append({"role": "assistant", "content": [output]})
 
                         # Save updated chat history
                         with open(history_file, 'w') as f:
