@@ -365,6 +365,47 @@ def handle_incoming_message():
 
                         response = requests.post(url, headers=headers, json=data)
 
+                        
+
+
+                        intent_history = chat_history
+                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can Prometheus start to build the AI now, reply with 1 or 0, one stands for yes the user has approved the solution and building should start, No is we still need to clarify a few things before we start. Give no explanations for your answer, reply with 1 or 0"}) 
+
+                        from groq import Groq
+
+                        # Add your API key here
+                        api_key = "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"
+
+                        # Instantiate the client with the API key
+                        client = Groq(api_key=api_key)
+
+                        # Store the output in a variable
+                        output = ""
+
+                        completion = client.chat.completions.create(
+                            model="llama-3.2-11b-text-preview",
+                            messages=
+                                intent_history
+                    ,
+                            temperature=1,
+                            max_tokens=1024,
+                            top_p=1,
+                            stream=True,
+                            stop=None,
+                        )
+
+                        # Append the output to the variable
+                        for chunk in completion:
+                            intent += chunk.choices[0].delta.content or ""
+
+                        # Now `output` holds the response from the model
+                        print(f" Build intent is: {intent}")
+
+
+
+
+
+
 
 
 
