@@ -414,7 +414,7 @@ def handle_incoming_message():
                                 "to": wa_id,
                                 "type": "text",
                                 "text": {
-                                    "body": "Buiding has started..."
+                                    "body": "Buiding has started... I will train your AI and build a website for it. When I done, I will send you a message."
                                 }
                             }
 
