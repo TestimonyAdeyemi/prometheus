@@ -290,123 +290,150 @@ def handle_incoming_message():
                     if 'text' in messages[0] and 'body' in messages[0]['text']:
                         body = messages[0]['text']['body']
                         wa_id = contacts[0]['wa_id']
-                        
 
-                        # File path for user history
-                        history_file = f"user_{wa_id}_history.json"
 
-                        # Check if user history exists
-                        if os.path.exists(history_file):
-                            with open(history_file, 'r') as f:
-                                chat_history = json.load(f)
+                        if body == "yes":
+                            print("building starts....")
+
+                            # File path for user history
+                            history_file = f"user_{wa_id}_history.json"
+
+                            # Check if user history exists
+                            if os.path.exists(history_file):
+                                with open(history_file, 'r') as f:
+                                    chat_history = json.load(f)
+                            else:
+                                chat_history = []
+                                chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them."})
+
+                            intent_history = chat_history
+                            intent_history = []
+
+                            intent_history.append({"role": "user", "content": "Based on your previous conversation with the user, what does the user want to build. 1 website or 2 AI chatbot 3 None. Reply with  1, 2 or 3 give no explanations. Only 1, 2, or 3"}) 
+
+
+                            from groq import Groq
+
+                            # Add your API key here
+                            api_key = "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"
+
+                            # Instantiate the client with the API key
+                            client = Groq(api_key=api_key)
+
+                            # Store the output in a variable
+                            output = ""
+
+                            completion = client.chat.completions.create(
+                                model="llama-3.2-11b-text-preview",
+                                messages=
+                                    chat_history
+                        ,
+                                temperature=1,
+                                max_tokens=1024,
+                                top_p=1,
+                                stream=True,
+                                stop=None,
+                            )
+
+                            # Append the output to the variable
+                            for chunk in completion:
+                                output += chunk.choices[0].delta.content or ""
+
+                            # Now `output` holds the response from the model
+                            print(output)
+
+                            if output == "1":
+
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "Buiding has started... I will build your website as you instructed. When I'm done, I will send you the link to it."
+                                    }
+                                }
+
+                                response = requests.post(url, headers=headers, json=data)
+
+                            if output == "2":
+
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "Buiding has started... I will train your AI Chatbot as you instructed. When I'm done, I will send you the link to it."
+                                    }
+                                }
+
+                                response = requests.post(url, headers=headers, json=data)
+
                         else:
-                            chat_history = []
-                            chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a an AI engineer that builds chatbots. What makes you special is that you actually automatically build AIs just by text, you are created to help people who have no technical expertise but still want to build great stuff.  You give a layer of abstraction. That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them. Make sure to introduce yourself and get your users name as well. Your purpose to help people achive thier dreams and goals especially women who want to make impact, and do something good for the world but lack the skills and even the time and liberty to learn, the girl child is more likely to be stuck in the kitchen, or the young mother who cannot go to a school but still wants to do some good for the world. You can build these for them and help them achieve their potential with no limitations. You can train the AI and deploy it on the internet. \n\nAlways have the following 4 things:\n1. The name of the AI your user wants to build\n2. What the AI should be able to do? The features\n\nYour personality is friendly, kind and helpful. "
-        })
+                            # File path for user history
+                            history_file = f"user_{wa_id}_history.json"
+
+                            # Check if user history exists
+                            if os.path.exists(history_file):
+                                with open(history_file, 'r') as f:
+                                    chat_history = json.load(f)
+                            else:
+                                chat_history = []
+                                chat_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a like an assistant that can help women especially build websites and AI chatbots.  For now you can automatically create a simple one pager website for like a business, and you can create an AI chatbot and modify its behaviour. You are created to help people who have no technical expertise but still want to build great stuff.  That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them."})
+
+                            
+                            from groq import Groq
+
+                            # Add your API key here
+                            api_key = "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"
+
+                            # Instantiate the client with the API key
+                            client = Groq(api_key=api_key)
+
+                            # Store the output in a variable
+                            output = ""
+
+                            completion = client.chat.completions.create(
+                                model="llama-3.2-11b-text-preview",
+                                messages=
+                                    chat_history
+                        ,
+                                temperature=1,
+                                max_tokens=1024,
+                                top_p=1,
+                                stream=True,
+                                stop=None,
+                            )
+
+                            # Append the output to the variable
+                            for chunk in completion:
+                                output += chunk.choices[0].delta.content or ""
+
+                            # Now `output` holds the response from the model
+                            print(output)
+                            
+                            # Update chat history
+                            chat_history.append({"role": "user", "content": body})    # 'body' is a string
+                            chat_history.append({"role": "assistant", "content": output})
+                            print(chat_history)
+
+                            # Save updated chat history
+                            with open(history_file, 'w') as f:
+                                json.dump(chat_history, f)
 
 
-
-                        from groq import Groq
-
-                        # Add your API key here
-                        api_key = "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"
-
-                        # Instantiate the client with the API key
-                        client = Groq(api_key=api_key)
-
-                        # Store the output in a variable
-                        output = ""
-
-                        completion = client.chat.completions.create(
-                            model="llama-3.2-11b-text-preview",
-                            messages=
-                                chat_history
-                    ,
-                            temperature=1,
-                            max_tokens=1024,
-                            top_p=1,
-                            stream=True,
-                            stop=None,
-                        )
-
-                        # Append the output to the variable
-                        for chunk in completion:
-                            output += chunk.choices[0].delta.content or ""
-
-                        # Now `output` holds the response from the model
-                        print(output)
-                        
-                         # Update chat history
-                        chat_history.append({"role": "user", "content": body})    # 'body' is a string
-                        chat_history.append({"role": "assistant", "content": output})
-                        print(chat_history)
-
-                        # Save updated chat history
-                        with open(history_file, 'w') as f:
-                            json.dump(chat_history, f)
-
-
-                        
-                        # Send response back to WhatsApp
-                        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
-                        headers = {
-                            "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
-                            "Content-Type": "application/json"
-                        }
-
-                        data = {
-                            "messaging_product": "whatsapp",
-                            "to": wa_id,
-                            "type": "text",
-                            "text": {
-                                "body": output
-                            }
-                        }
-
-                        response = requests.post(url, headers=headers, json=data)
-
-                        
-
-                        intent_history = chat_history
-                        intent_history = []
-
-
-                        # intent_history.append({"role": "system", "content": "Your name is Prometheus and you help people especially women who have dreams and ideas to build their ideas. You are a an AI engineer that builds chatbots. What makes you special is that you actually automatically build AIs just by text, you are created to help people who have no technical expertise but still want to build great stuff.  You give a layer of abstraction. That means the user will explain to you what they want and your job is to understand what your users want and just confirm with them. Make sure to introduce yourself and get your users name as well. Your purpose to help people achive thier dreams and goals especially women who want to make impact, and do something good for the world but lack the skills and even the time and liberty to learn, the girl child is more likely to be stuck in the kitchen, or the young mother who cannot go to a school but still wants to do some good for the world. You can build these for them and help them achieve their potential with no limitations. You can train the AI and deploy it on the internet. \n\nAlways have the following 4 things:\n1. The name of the AI your user wants to build\n2. What the AI should be able to do? The features\n\nYour personality is friendly, kind and helpful. "})
-                        # intent_history.append({"role": "user", "content": body})    # 'body' is a string
-                        # intent_history.append({"role": "assistant", "content": output})
-                        intent_history.append({"role": "user", "content": "Hey, listen to me carefully, judging from the conversation, can you start to build the AI now, does you have all the information it needs to build right now..., reply with 1 or 0, 1 stands for yes building should start, No is you still need to clarify a few things and engage the user alot more. Give no explanations for your answer, reply with 1 or 0"}) 
-
-                        from groq import Groq
-
-                        # Add your API key here
-                        api_key = "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"
-
-                        # Instantiate the client with the API key
-                        client = Groq(api_key=api_key)
-
-                        # Store the output in a variable
-                        intent = ""
-
-                        completion = client.chat.completions.create(
-                            model="llama-3.2-11b-text-preview",
-                            messages=
-                                intent_history
-                    ,
-                            temperature=1,
-                            max_tokens=1024,
-                            top_p=1,
-                            stream=True,
-                            stop=None,
-                        )
-
-                        # Append the output to the variable
-                        for chunk in completion:
-                            intent += chunk.choices[0].delta.content or ""
-
-                        # Now `output` holds the response from the model
-                        print(f" Build intent is: {intent}")
-
-                        if intent == "1":
+                            
                             # Send response back to WhatsApp
                             url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                             headers = {
@@ -419,7 +446,26 @@ def handle_incoming_message():
                                 "to": wa_id,
                                 "type": "text",
                                 "text": {
-                                    "body": "Buiding has started... I will train your AI and build a website for you to access. When I'm done, I will send you a message."
+                                    "body": output
+                                }
+                            }
+
+
+
+                            response = requests.post(url, headers=headers, json=data)
+
+                            url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                            headers = {
+                                "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                "Content-Type": "application/json"
+                            }
+
+                            data = {
+                                "messaging_product": "whatsapp",
+                                "to": wa_id,
+                                "type": "text",
+                                "text": {
+                                    "body": "PS. Reply with only the word yes if you want me to start to build. If your're not ready lets keep talking."
                                 }
                             }
 
@@ -427,16 +473,7 @@ def handle_incoming_message():
 
 
 
-
-
-
-
-
-
-
-
-
-                       
+                        
 
 
                     # No else case, just ignore if the text/body isn't present
