@@ -695,6 +695,7 @@ def handle_incoming_message():
 
                                     # Create a new site if site_name is provided
                                     if site_name:
+                                        import requests
                                         create_site_response = requests.post(
                                             f"{NETLIFY_API}/sites",
                                             headers=headers,
