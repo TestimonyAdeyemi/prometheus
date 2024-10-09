@@ -216,6 +216,10 @@ def handle_incoming_message():
                     # No else case, just ignore if the text/body isn't present
     except (KeyError, IndexError) as e:
         pass  # Just ignore and do nothing
+    
+    return "OK", 200 
+
+
 
 
 if __name__ == "__main__":
