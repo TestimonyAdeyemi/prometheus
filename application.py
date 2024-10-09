@@ -562,7 +562,7 @@ def handle_incoming_message():
                                 from groq import Groq
 
                                 # Add your API key here
-                                api_key = "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"
+                                api_key = "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"
 
                                 # Instantiate the client with the API key
                                 client = Groq(api_key=api_key)
@@ -603,7 +603,7 @@ def handle_incoming_message():
                                 from groq import Groq
 
                                 # Add your API key here
-                                api_key = "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"
+                                api_key = "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"
 
                                 # Instantiate the client with the API key
                                 client = Groq(api_key=api_key)
@@ -674,7 +674,7 @@ def handle_incoming_message():
 
 
 
-                                
+                                import requests
                                 # Netlify API endpoint
                                 NETLIFY_API = "https://api.netlify.com/api/v1"
 
