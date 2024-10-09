@@ -296,6 +296,10 @@ def handle_incoming_message():
                         wa_id = contacts[0]['wa_id']
 
 
+
+
+
+
                         if body in handled_messages:
                             print("breakpoint")
                             pass
@@ -520,119 +524,249 @@ def handle_incoming_message():
 
 
 
-                                chat_history = []
-                                chat_history.append({"role": "system", "content": f"You are the best html website coder ever, you take a description of the website to build and you only reply with the detailed and complete html code to implement it. Here is the image url. I have the js file called script.js and css file called style.css files. Don't bother about them, focus on making the html as extensive and good as possible. Do not use external apis right now. Reply only with the html code, give no explanations.  Here are the image links to use in the builiding {image_links}"})
-                                chat_history.append({"role": "user", "content": body})
+                            #     chat_history = []
+                            #     chat_history.append({"role": "system", "content": f"You are the best html website coder ever, you take a description of the website to build and you only reply with the detailed and complete html code to implement it. Here is the image url. I have the js file called script.js and css file called style.css files. Don't bother about them, focus on making the html as extensive and good as possible. Do not use external apis right now. Reply only with the html code, give no explanations.  Here are the image links to use in the builiding {image_links}"})
+                            #     chat_history.append({"role": "user", "content": body})
 
 
                             
-                                from groq import Groq
+                            #     from groq import Groq
 
-                                # Add your API key here
-                                api_key = "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"
+                            #     # Add your API key here
+                            #     api_key = "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"
 
-                                # Instantiate the client with the API key
-                                client = Groq(api_key=api_key)
+                            #     # Instantiate the client with the API key
+                            #     client = Groq(api_key=api_key)
 
-                                # Store the output in a variable
-                                html_output = ""
+                            #     # Store the output in a variable
+                            #     html_output = ""
 
-                                completion = client.chat.completions.create(
-                                    model="llama-3.2-11b-text-preview",
-                                    messages=
-                                        chat_history
-                            ,
-                                    temperature=1,
-                                    max_tokens=1024,
-                                    top_p=1,
-                                    stream=True,
-                                    stop=None,
-                                )
+                            #     completion = client.chat.completions.create(
+                            #         model="llama-3.2-11b-text-preview",
+                            #         messages=
+                            #             chat_history
+                            # ,
+                            #         temperature=1,
+                            #         max_tokens=1024,
+                            #         top_p=1,
+                            #         stream=True,
+                            #         stop=None,
+                            #     )
 
-                                # Append the output to the variable
-                                for chunk in completion:
-                                    html_output += chunk.choices[0].delta.content or ""
+                            #     # Append the output to the variable
+                            #     for chunk in completion:
+                            #         html_output += chunk.choices[0].delta.content or ""
+
+                                genai.configure(api_key="AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8")
+
+                                # Set up the model
+                                generation_config = {
+                                "temperature": 0.9,
+                                "top_p": 1,
+                                "top_k": 1,
+                                "max_output_tokens": 4048,
+                                }
+
+                                safety_settings = [
+                                {
+                                    "category": "HARM_CATEGORY_HARASSMENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_HATE_SPEECH",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                ]
+
+                                model = genai.GenerativeModel(model_name="gemini-1.5-flash-002",
+                                                            generation_config=generation_config,
+                                                            safety_settings=safety_settings)
+
+                                convo = model.start_chat(history=[
+                                ])
+
+                                convo.send_message(f"create the HTML part of this project{body} and I have image links that you must use in the wesbite here {image_links}. i have js called script.js and css called style.css files. Make sure the website is professional. use the image links, i gave you. Make the website robust and well detailed. Generate the website content too")
+                                html_content = convo.last.text
+                                html_output = html_content
 
                                 # Now `output` holds the response from the model
                                 print(html_output)
 
 
-                                chat_history = []
-                                chat_history.append({"role": "system", "content": f"You are the best css website coder ever, you take the html code {html_output} of the website we're building and write the css code to make it beautiful and you only reply with the detailed and complete css code to implement it. Here is the html code. I have the js file called script.js  Don't bother about it, focus on making the css as extensive and good as possible. Reply only with the css code, give no explanations."})
-                                chat_history.append({"role": "user", "content": "make the css compliment our website very well. make it look very nice and professional. Reply only with css code, do not give any explanations. Make the css code extensive."})
+                            #     chat_history = []
+                            #     chat_history.append({"role": "system", "content": f"You are the best css website coder ever, you take the html code {html_output} of the website we're building and write the css code to make it beautiful and you only reply with the detailed and complete css code to implement it. Here is the html code. I have the js file called script.js  Don't bother about it, focus on making the css as extensive and good as possible. Reply only with the css code, give no explanations."})
+                            #     chat_history.append({"role": "user", "content": "make the css compliment our website very well. make it look very nice and professional. Reply only with css code, do not give any explanations. Make the css code extensive."})
 
 
                             
-                                from groq import Groq
+                            #     from groq import Groq
 
-                                # Add your API key here
-                                api_key = "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"
+                            #     # Add your API key here
+                            #     api_key = "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"
 
-                                # Instantiate the client with the API key
-                                client = Groq(api_key=api_key)
+                            #     # Instantiate the client with the API key
+                            #     client = Groq(api_key=api_key)
 
-                                # Store the output in a variable
-                                css_output = ""
+                            #     # Store the output in a variable
+                            #     css_output = ""
 
-                                completion = client.chat.completions.create(
-                                    model="llama-3.2-11b-text-preview",
-                                    messages=
-                                        chat_history
-                            ,
-                                    temperature=1,
-                                    max_tokens=1024,
-                                    top_p=1,
-                                    stream=True,
-                                    stop=None,
-                                )
+                            #     completion = client.chat.completions.create(
+                            #         model="llama-3.2-11b-text-preview",
+                            #         messages=
+                            #             chat_history
+                            # ,
+                            #         temperature=1,
+                            #         max_tokens=1024,
+                            #         top_p=1,
+                            #         stream=True,
+                            #         stop=None,
+                            #     )
 
-                                # Append the output to the variable
-                                for chunk in completion:
-                                    css_output += chunk.choices[0].delta.content or ""
+                            #     # Append the output to the variable
+                            #     for chunk in completion:
+                            #         css_output += chunk.choices[0].delta.content or ""
 
-                                # Now `output` holds the response from the model
-                                print(css_output)
-
-
+                            #     # Now `output` holds the response from the model
+                            #     print(css_output)
 
 
+                                import google.generativeai as genai
+
+                                genai.configure(api_key="AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8")
+
+                                # Set up the model
+                                generation_config = {
+                                "temperature": 0.9,
+                                "top_p": 1,
+                                "top_k": 1,
+                                "max_output_tokens": 2048,
+                                }
+
+                                safety_settings = [
+                                {
+                                    "category": "HARM_CATEGORY_HARASSMENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_HATE_SPEECH",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                ]
+
+                                model = genai.GenerativeModel(model_name="gemini-1.5-flash-002",
+                                                            generation_config=generation_config,
+                                                            safety_settings=safety_settings)
+
+                                convo = model.start_chat(history=[
+                                ])
+
+                                convo.send_message(f"generating code only, create the CSS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code. Make it look good, please and have an hero segment")
+                                css_content = convo.last.text
+                                css_output = css_content
+                                print(css_content)
 
 
 
-                                chat_history = []
-                                chat_history.append({"role": "system", "content": f"You are the best js website coder ever, you take the html code {html_output} of the website we're building and write the js code to make it beautiful and well made and you only reply with the detailed and complete js code to implement it. Here is the html code. Reply only with the js code, give no explanations."})
-                                chat_history.append({"role": "user", "content": "make the js compliment our website very well. make it look very nice and professional. Reply only with js code, do not give any explanations. Make the js code extensive."})
 
 
-                                from groq import Groq
+                                import google.generativeai as genai
 
-                                # Add your API key here
-                                api_key = "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"
+                                genai.configure(api_key="AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8")
 
-                                # Instantiate the client with the API key
-                                client = Groq(api_key=api_key)
+                                # Set up the model
+                                generation_config = {
+                                "temperature": 0.9,
+                                "top_p": 1,
+                                "top_k": 1,
+                                "max_output_tokens": 2048,
+                                }
 
-                                # Store the output in a variable
-                                js_output = ""
+                                safety_settings = [
+                                {
+                                    "category": "HARM_CATEGORY_HARASSMENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_HATE_SPEECH",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                {
+                                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                    "threshold": "BLOCK_NONE"
+                                },
+                                ]
 
-                                completion = client.chat.completions.create(
-                                    model="llama-3.2-11b-text-preview",
-                                    messages=
-                                        chat_history
-                            ,
-                                    temperature=1,
-                                    max_tokens=1024,
-                                    top_p=1,
-                                    stream=True,
-                                    stop=None,
-                                )
+                                model = genai.GenerativeModel(model_name="gemini-1.5-flash",
+                                                            generation_config=generation_config,
+                                                            safety_settings=safety_settings)
 
-                                # Append the output to the variable
-                                for chunk in completion:
-                                    js_output += chunk.choices[0].delta.content or ""
+                                convo = model.start_chat(history=[
+                                ])
 
-                                # Now `output` holds the response from the model
-                                print(js_output)
+                                convo.send_message(f"genating code only, create the JS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code")
+                                js_output = convo.last.text
+                                js_content = js_output
+
+
+
+
+
+
+
+                            #     chat_history = []
+                            #     chat_history.append({"role": "system", "content": f"You are the best js website coder ever, you take the html code {html_output} of the website we're building and write the js code to make it beautiful and well made and you only reply with the detailed and complete js code to implement it. Here is the html code. Reply only with the js code, give no explanations."})
+                            #     chat_history.append({"role": "user", "content": "make the js compliment our website very well. make it look very nice and professional. Reply only with js code, do not give any explanations. Make the js code extensive."})
+
+
+                            #     from groq import Groq
+
+                            #     # Add your API key here
+                            #     api_key = "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"
+
+                            #     # Instantiate the client with the API key
+                            #     client = Groq(api_key=api_key)
+
+                            #     # Store the output in a variable
+                            #     js_output = ""
+
+                            #     completion = client.chat.completions.create(
+                            #         model="llama-3.2-11b-text-preview",
+                            #         messages=
+                            #             chat_history
+                            # ,
+                            #         temperature=1,
+                            #         max_tokens=1024,
+                            #         top_p=1,
+                            #         stream=True,
+                            #         stop=None,
+                            #     )
+
+                            #     # Append the output to the variable
+                            #     for chunk in completion:
+                            #         js_output += chunk.choices[0].delta.content or ""
+
+                            #     # Now `output` holds the response from the model
+                            #     print(js_output)
 
 
 
