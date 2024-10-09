@@ -327,7 +327,7 @@ def handle_incoming_message():
                             client = Groq(api_key=api_key)
 
                             # Store the output in a variable
-                            output = ""
+                            model_output = ""
 
                             completion = client.chat.completions.create(
                                 model="llama-3.2-11b-text-preview",
@@ -343,14 +343,14 @@ def handle_incoming_message():
 
                             # Append the output to the variable
                             for chunk in completion:
-                                output += chunk.choices[0].delta.content or ""
+                                model_output += chunk.choices[0].delta.content or ""
 
                             # Now `output` holds the response from the model
                             print(output)
                             
                             # Update chat history
                             chat_history.append({"role": "user", "content": body})    # 'body' is a string
-                            chat_history.append({"role": "assistant", "content": output})
+                            chat_history.append({"role": "assistant", "content": model_output})
                             print(chat_history)
 
                             # Save updated chat history
@@ -371,7 +371,7 @@ def handle_incoming_message():
                                 "to": wa_id,
                                 "type": "text",
                                 "text": {
-                                    "body": output
+                                    "body": model_output
                                 }
                             }
 
@@ -479,7 +479,7 @@ def handle_incoming_message():
                                 
                                 import requests
 
-                                def get_image_links(query, access_key, num_links=5):
+                                def get_image_links(query, access_key, num_links=10):
                                     image_links = []
                                     # Construct the API request
                                     url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
@@ -595,7 +595,7 @@ def handle_incoming_message():
                                 convo = model.start_chat(history=[
                                 ])
 
-                                convo.send_message(f"create the HTML part of this project{body} and I have image links that you must use in the wesbite here {image_links}. i have js called script.js and css called style.css files. Make sure the website is professional. use the image links, i gave you. Make the website robust and well detailed. Generate the website content too")
+                                convo.send_message(f"create the HTML part of this project{model_output} and I have image links that you must use in the wesbite here {image_links}. i have js called script.js and css called style.css files. Make sure the website is professional. use the image links, i gave you. Make the website robust and well detailed. Generate the website content too. Give no explanations,  just give me the code")
                                 html_content = convo.last.text
                                 html_output = html_content
 
@@ -678,7 +678,7 @@ def handle_incoming_message():
                                 convo = model.start_chat(history=[
                                 ])
 
-                                convo.send_message(f"generating code only, create the CSS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code. Make it look good, please and have an hero segment")
+                                convo.send_message(f"generating code only, create the CSS PART of this project{model_output}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code. Make it look good, please and have an hero segment")
                                 css_content = convo.last.text
                                 css_output = css_content
                                 print(css_content)
@@ -725,7 +725,7 @@ def handle_incoming_message():
                                 convo = model.start_chat(history=[
                                 ])
 
-                                convo.send_message(f"genating code only, create the JS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code")
+                                convo.send_message(f"genating code only, create the JS PART of this project{model_output}, considering this is the html part {html_output} feel free to be creative, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code")
                                 js_output = convo.last.text
                                 js_content = js_output
 
