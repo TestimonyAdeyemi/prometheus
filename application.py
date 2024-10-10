@@ -308,6 +308,7 @@ def handle_incoming_message():
                             history_file = f"user_{wa_id}_history.json"
 
                             # Check if user history exists
+                            import os
                             if os.path.exists(history_file):
                                 with open(history_file, 'r') as f:
                                     chat_history = json.load(f)
