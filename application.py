@@ -476,29 +476,84 @@ def handle_incoming_message():
 
 
                                 
-                                import requests
+                                # import requests
 
-                                def get_image_links(query, access_key, num_links=5):
-                                    image_links = []
-                                    # Construct the API request
-                                    url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
-                                    # Send the request
-                                    response = requests.get(url)
-                                    # Parse the JSON response
-                                    data = response.json()
-                                    # Extract image links
-                                    for result in data["results"]:
-                                        image_links.append(result["urls"]["full"])
-                                    return image_links
+                                # def get_image_links(query, access_key, num_links=5):
+                                #     image_links = []
+                                #     # Construct the API request
+                                #     url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
+                                #     # Send the request
+                                #     response = requests.get(url)
+                                #     # Parse the JSON response
+                                #     data = response.json()
+                                #     # Extract image links
+                                #     for result in data["results"]:
+                                #         image_links.append(result["urls"]["full"])
+                                #     return image_links
 
-                                # Example usage:
-                                object_query =  query
-                                access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
-                                image_links = get_image_links(object_query, access_key)
-                                print(image_links)
+                                # # Example usage:
+                                # object_query =  query
+                                # access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
+                                # image_links = get_image_links(object_query, access_key)
+                                # print(image_links)
                                 # for link in image_links:
                                 #     print(link)
+
+
+                                import requests
+                                from bs4 import BeautifulSoup
+                                import re
+
+                                def get_image_urls(query, num_images=10):
+                                    # Format the query to be URL-safe
+                                    query = query.replace(' ', '+')
+                                    url = f"https://www.google.com/search?q={query}&tbm=isch"
+
+                                    # Set up headers to mimic a regular browser request
+                                    headers = {
+                                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+                                    }
+
+                                    # Send the request to Google
+                                    response = requests.get(url, headers=headers)
+                                    if response.status_code != 200:
+                                        print("Failed to retrieve data")
+                                        return []
+
+                                    # Parse the HTML content using BeautifulSoup
+                                    soup = BeautifulSoup(response.text, 'html.parser')
+
+                                    # Find all image elements
+                                    image_elements = soup.find_all("img", {"src": re.compile("gstatic.com")})
                                     
+                                    # Extract image URLs
+                                    image_urls = [img["src"] for img in image_elements[:num_images]]
+
+                                    return image_urls
+
+                                # Example usage:
+                                search_query = query
+                                image_urls = get_image_urls(search_query)
+
+                                # Display the image URLs
+                                print("Image URLs:", image_urls)
+
+                                image_links = image_urls
+
+
+
+
+
+
+
+                                    
+
+
+
+
+
+
+
                                 import requests
 
 
@@ -684,6 +739,8 @@ def handle_incoming_message():
       
 
                                 convo.send_message(f"generating code only, create the CSS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, follow the implmentation of css here {inspiration}, learn from it, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code. Make it look good, please and have an hero segment")
+                                convo.send_message(f"generating code only, create the CSS PART of this project{body}, considering this is the html part {html_output} feel free to be creative, follow the implmentation of css here {inspiration}, learn from it, make sure the website is well designed and the displays professioanlism. Give no explanations, just pure code. Make it look good, please and have an hero segment")
+                               
                                 css_content = convo.last.text
                                 css_output = css_content
                                 print(css_content)
