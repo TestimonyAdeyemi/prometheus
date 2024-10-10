@@ -309,6 +309,7 @@ def handle_incoming_message():
 
                             # Check if user history exists
                             import os
+
                             if os.path.exists(history_file):
                                 with open(history_file, 'r') as f:
                                     chat_history = json.load(f)
@@ -352,7 +353,7 @@ def handle_incoming_message():
                             # Update chat history
                             chat_history.append({"role": "user", "content": body})    # 'body' is a string
                             chat_history.append({"role": "assistant", "content": model_output})
-                            print(chat_history)
+                            #print(chat_history)
 
                             # Save updated chat history
                             with open(history_file, 'w') as f:
@@ -906,11 +907,13 @@ def handle_incoming_message():
 
 
                                 deploy_to_netlify(access_token, directory_path, site_name)
+                                chat_history = []
+
+
+
 
                                 
                             elif output == "2":
-
-
                                 url = "https://graph.facebook.com/v20.0/396015606935687/messages"
                                 headers = {
                                     "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
@@ -925,11 +928,7 @@ def handle_incoming_message():
                                         "body": "Sure, I will build that for you. Initiating building process..."
                                     }
                                 }
-
-
-
                                 import requests
-
                                 response = requests.post(url, headers=headers, json=data)
 
 
