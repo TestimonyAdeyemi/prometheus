@@ -457,8 +457,7 @@ def handle_incoming_message():
                                 completion = client.chat.completions.create(
                                     model="llama-3.2-11b-text-preview",
                                     messages=
-                                        chat_history
-                            ,
+                                        chat_history,
                                     temperature=1,
                                     max_tokens=1024,
                                     top_p=1,
@@ -908,15 +907,185 @@ def handle_incoming_message():
                                 deploy_to_netlify(access_token, directory_path, site_name)
 
                                 
+                            elif output == "2":
+
+
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "Sure, I will build that for you. Initiating building process..."
+                                    }
+                                }
 
 
 
+                                import requests
+
+                                response = requests.post(url, headers=headers, json=data)
 
 
 
+                                import os
+                                import google.generativeai as genai
+
+                                genai.configure(api_key=os.environ["AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8"])
+
+                                # Create the model
+                                generation_config = {
+                                "temperature": 1,
+                                "top_p": 0.95,
+                                "top_k": 40,
+                                "max_output_tokens": 8192,
+                                "response_mime_type": "text/plain",
+                                }
+
+                                model = genai.GenerativeModel(
+                                model_name="gemini-1.5-flash-002",
+                                generation_config=generation_config,
+                                # safety_settings = Adjust safety settings
+                                # See https://ai.google.dev/gemini-api/docs/safety-settings
+                                system_instruction="edit only the ui of this chatbot, this is our template, follow this, chnage the color or font type or ai greeting, dont add anything to the logic. Reply only with code with no explanations. Replace the simulated response with the bot's description of it self\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Chat Interface</title>\n    <style>\n        :root {\n            font-family: 'Montserrat', sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            color: #0f0f0f;\n            background-color: #f6f6f6;\n        }\n\n        body {\n            margin: 0;\n            padding: 0;\n            height: 100vh;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .chat-container {\n            display: flex;\n            flex-direction: column;\n            height: 100vh;\n            max-width: 1200px;\n            margin: 0 auto;\n            width: 100%;\n            padding: 20px;\n            box-sizing: border-box;\n        }\n\n        .chat-header {\n            text-align: center;\n            padding: 20px 0;\n            border-bottom: 1px solid #eaeaea;\n        }\n\n        .chat-header h1 {\n            background: linear-gradient(to right, #00ffff, #cf23cf);\n            -webkit-background-clip: text;\n            -webkit-text-fill-color: transparent;\n            margin: 0;\n            padding: 0;\n            font-size: 2.5rem;\n        }\n\n        .chat-messages {\n            flex-grow: 1;\n            overflow-y: auto;\n            padding: 20px 0;\n            display: flex;\n            flex-direction: column;\n            gap: 20px;\n        }\n\n        .message {\n            max-width: 80%;\n            padding: 12px 16px;\n            border-radius: 12px;\n            margin: 4px 0;\n        }\n\n        .user-message {\n            align-self: flex-end;\n            background-color: #646cff;\n            color: white;\n        }\n\n        .assistant-message {\n            align-self: flex-start;\n            background-color: #f0f0f0;\n            color: #333;\n        }\n\n        .chat-input-container {\n            padding: 20px 0;\n            border-top: 1px solid #eaeaea;\n            display: flex;\n            gap: 10px;\n        }\n\n        .chat-input {\n            flex-grow: 1;\n            padding: 12px;\n            border: 1px solid #ddd;\n            border-radius: 8px;\n            font-family: inherit;\n            font-size: 1rem;\n            outline: none;\n            transition: border-color 0.2s;\n        }\n\n        .chat-input:focus {\n            border-color: #646cff;\n        }\n\n        .send-button {\n            padding: 12px 24px;\n            background-color: #646cff;\n            color: white;\n            border: none;\n            border-radius: 8px;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n\n        .send-button:hover {\n            background-color: #535bf2;\n        }\n\n        .loading-spinner {\n            width: 25px;\n            height: 25px;\n            border: 3px solid #f0f0f0;\n            border-top: 3px solid #646cff;\n            border-radius: 50%;\n            animation: spin 1s linear infinite;\n            margin: 20px auto;\n            display: none;\n        }\n\n        @keyframes spin {\n            0% { transform: rotate(0deg); }\n            100% { transform: rotate(360deg); }\n        }\n\n        @media (prefers-color-scheme: dark) {\n            :root {\n                color: #f6f6f6;\n                background-color: #1a1a1a;\n            }\n\n            .chat-header {\n                border-bottom-color: #333;\n            }\n\n            .chat-input-container {\n                border-top-color: #333;\n            }\n\n            .chat-input {\n                background-color: #2a2a2a;\n                border-color: #444;\n                color: white;\n            }\n\n            .assistant-message {\n                background-color: #2a2a2a;\n                color: #f6f6f6;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"chat-container\">\n        <div class=\"chat-header\">\n            <h1>Chat Interface</h1>\n        </div>\n        \n        <div class=\"chat-messages\" id=\"chat-messages\">\n            <div class=\"message assistant-message\">\n                Hello! How can I help you today?\n            </div>\n        </div>\n\n        <div id=\"loadingSpinner\" class=\"loading-spinner\"></div>\n\n        <div class=\"chat-input-container\">\n            <input \n                type=\"text\" \n                class=\"chat-input\" \n                id=\"chat-input\" \n                placeholder=\"Type your message here...\"\n            >\n            <button class=\"send-button\" id=\"send-button\">Send</button>\n        </div>\n    </div>\n\n    <script>\n        const chatInput = document.getElementById('chat-input');\n        const sendButton = document.getElementById('send-button');\n        const chatMessages = document.getElementById('chat-messages');\n        const loadingSpinner = document.getElementById('loadingSpinner');\n\n        function addMessage(message, isUser = false) {\n            const messageDiv = document.createElement('div');\n            messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;\n            messageDiv.textContent = message;\n            chatMessages.appendChild(messageDiv);\n            chatMessages.scrollTop = chatMessages.scrollHeight;\n        }\n\n        function handleSend() {\n            const message = chatInput.value.trim();\n            if (message) {\n                addMessage(message, true);\n                chatInput.value = '';\n                \n                // Show loading spinner\n                loadingSpinner.style.display = 'block';\n                \n                // Simulate response (replace with actual API call)\n                setTimeout(() => {\n                    loadingSpinner.style.display = 'none';\n                    \n                    addMessage('This is a simulated response. Replace with actual API integration.');\n                }, 1000);\n            }\n        }\n\n        sendButton.addEventListener('click', handleSend);\n        chatInput.addEventListener('keypress', (e) => {\n            if (e.key === 'Enter') {\n                handleSend();\n            }\n        });\n    </script>\n</body>\n</html>",
+                                )
+
+                                chat_session = model.start_chat(
+                                history=[
+                                ]
+                                )
+
+                                response = chat_session.send_message(body)
+
+                                bot_code = response.text
+                                print(bot_code)
+
+                                # Create directories for files if they don't exist
+                                os.makedirs("bot_website", exist_ok=True)
+
+                                # Write HTML content to a file
+                                with open("website_bot/index.html", "w") as html_file:
+                                    html_file.write(bot_code)
+
+
+                                url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                headers = {
+                                    "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                    "Content-Type": "application/json"
+                                }
+
+                                data = {
+                                    "messaging_product": "whatsapp",
+                                    "to": wa_id,
+                                    "type": "text",
+                                    "text": {
+                                        "body": "Building complete, starting deployment..."
+                                    }
+                                }
+
+                                import requests
+
+                                response = requests.post(url, headers=headers, json=data)
 
 
 
+                                import requests
+                                # Netlify API endpoint
+                                NETLIFY_API = "https://api.netlify.com/api/v1"
+
+                                def deploy_to_netlify(access_token, directory_path, site_name=None):
+                                    # Validate the directory
+                                    if not os.path.isdir(directory_path):
+                                        raise ValueError(f"The specified path '{directory_path}' is not a valid directory.")
+
+                                    # Prepare the headers for the API request
+                                    headers = {
+                                        "Authorization": f"Bearer {access_token}",
+                                        "Content-Type": "application/zip"
+                                    }
+
+                                    # Zip the directory
+                                    zip_path = "site.zip"
+                                    os.system(f"zip -r {zip_path} {directory_path}")
+
+                                    # Create a new site if site_name is provided
+                                    if site_name:
+                                        import requests
+                                        create_site_response = requests.post(
+                                            f"{NETLIFY_API}/sites",
+                                            headers=headers,
+                                            json={"name": site_name}
+                                        )
+                                        if create_site_response.status_code != 201:
+                                            print(f"Failed to create site. Status code: {create_site_response.status_code}")
+                                            print(f"Error message: {create_site_response.text}")
+                                            return
+                                        site_id = create_site_response.json()["id"]
+                                        print(f"Created new site with ID: {site_id}")
+                                    else:
+                                        # If no site_name is provided, deploy to the user's first site
+                                        sites_response = requests.get(f"{NETLIFY_API}/sites", headers=headers)
+                                        if sites_response.status_code != 200 or not sites_response.json():
+                                            print("No existing sites found and no site name provided to create a new one.")
+                                            return
+                                        site_id = sites_response.json()[0]["id"]
+                                        print(f"Deploying to existing site with ID: {site_id}")
+
+                                    # Upload the zipped site
+                                    with open(zip_path, "rb") as zip_file:
+                                        response = requests.post(
+                                            f"{NETLIFY_API}/sites/{site_id}/deploys",
+                                            headers=headers,
+                                            data=zip_file
+                                        )
+
+                                    # Clean up the zip file
+                                    os.remove(zip_path)
+
+                                    # Check the response
+                                    if response.status_code == 200:
+                                        deploy_url = response.json()["deploy_url"]
+                                        print(f"Deployment successful! Your site is live at: {deploy_url}")
+
+                                         #keeping user in loop
+                                        url = "https://graph.facebook.com/v20.0/396015606935687/messages"
+                                        headers = {
+                                            "Authorization": "Bearer EAAPPDu1MMoEBOzXqZCfroxXGYyono1AvwrkrTrg8OyhlH0KjTzqr9F5W36lvyZCV3fDoxpp92AgGnyKyRbt8ihOJ0za2PnsRJK3ZAhW4ZBoyeZBmzWKWAn9BZCouOQ9gghESIUG6xNxJlUJRlu6KwiQNHu7v3doZCCeKg8lN4qiPfCYZCcC0N5WVMmUqd2DYXir7EwZDZD",
+                                            "Content-Type": "application/json"
+                                        }
+
+                                        data = {
+                                            "messaging_product": "whatsapp",
+                                            "to": wa_id,
+                                            "type": "text",
+                                            "text": {
+                                                "body": deploy_url
+                                            }
+                                        }
+
+
+
+                                        import requests
+
+                                        response = requests.post(url, headers=headers, json=data)
+                                          # Open the URL in the default web browser
+                                    else:
+                                        print(f"Deployment failed. Status code: {response.status_code}")
+                                        print(f"Error message: {response.text}")
+
+                                # Usage
+                                access_token = "nfp_4uUmEKzfAsAa1dmVYedSeebLDEw6DKmT49a8"
+                                directory_path = "website_bot"
+                                site_name = "my-awesome-site"  # Optional: Provide a name to create a new site
+
+                                deploy_to_netlify(access_token, directory_path, site_name)
+
+                                
 
             
                     # No else case, just ignore if the text/body isn't present
