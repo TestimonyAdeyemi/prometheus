@@ -99,14 +99,57 @@
 
 
 
-from huggingface_hub import InferenceClient
+# from huggingface_hub import InferenceClient
 
-client = InferenceClient(api_key="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")
+# client = InferenceClient(api_key="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")
 
-for message in client.chat_completion(
-	model="meta-llama/Llama-3.1-8B-Instruct",
-	messages=[{"role": "user", "content": "What is the capital of France?"}],
-	max_tokens=500,
-	stream=True,
-):
-    print(message.choices[0].delta.content, end="")
+# for message in client.chat_completion(
+# 	model="meta-llama/Llama-3.1-8B-Instruct",
+# 	messages=[{"role": "user", "content": "What is the capital of France?"}],
+# 	max_tokens=500,
+# 	stream=True,
+# ):
+#     print(message.choices[0].delta.content, end="")
+
+
+
+
+import requests
+from bs4 import BeautifulSoup
+import re
+
+def get_image_urls(query, num_images=10):
+    # Format the query to be URL-safe
+    query = query.replace(' ', '+')
+    url = f"https://www.google.com/search?q={query}&tbm=isch"
+
+    # Set up headers to mimic a regular browser request
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+    }
+
+    # Send the request to Google
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        print("Failed to retrieve data")
+        return []
+
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find all image elements
+    image_elements = soup.find_all("img", {"src": re.compile("gstatic.com")})
+    
+    # Extract image URLs
+    image_urls = [img["src"] for img in image_elements[:num_images]]
+
+    return image_urls
+
+# Example usage:
+search_query = "african hairstyles pinterest"
+image_urls = get_image_urls(search_query)
+
+# Display the image URLs
+print("Image URLs:", image_urls)
+
+image_links = image_urls

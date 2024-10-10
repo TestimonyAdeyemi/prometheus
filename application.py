@@ -532,13 +532,16 @@ def handle_incoming_message():
                                     return image_urls
 
                                 # Example usage:
-                                search_query = query
-                                image_urls = get_image_urls(search_query)
+                                # search_query = query
+                                # image_urls = get_image_urls(search_query)
 
-                                # Display the image URLs
-                                print("Image URLs:", image_urls)
+                                # # Display the image URLs
+                                # print("Image URLs:", image_urls)
 
-                                image_links = image_urls
+                                # image_links = image_urls
+
+
+                                image_links = "['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR3zygyl9qt5xYRbKO_tMhIM9k0giUt3fCjTuWg2bcopGYaoEf_Agn52nZEfE&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREB24jgWEQnzMDhORw_XJz-38U3pNaRKl6voHUybEd2RqO34lyZrmb2lI5Ig&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFFBJKHxGhNWi_NssWOfpGPiglJ-nvZhJVLi2mt8pPjkeSLVpY3dzfbk9lwg&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnJxKytCmMrp6z24RT5rcUPuDAXSzoJ2N7xdpD5zGAgq4rJUR-6cay-QQgcUM&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjpeCMFjjvOrAdSLFeY82ASEV5-c2GVcpijFzhBkbaWUiCz3K1gQeB0KiI2I&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2mD-wIxNnLW8z_1WoIaEIkSjHwgVriXQaRMFp-LwQWH-89oHo6LAgAQWelQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwp4IILc3OVlhw6wD3brwnRyb1egNq4fWkGrHsxYyK1qD6nroRZFwpX33z-Q&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI_qzKjg2Vr_ThUw8-d0tHeR0jn9Ge4RBQpGifKwOm26h0JQtURmfbs6Fd9iA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgBVtDFhijOs574noueTOJO0J0Wrz1-jIoC6Vh7PXHfG0oaKrMLphvYVrSzQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQKhVdqmVxFlvnN5icheRunry-iACXJe86co6Jqdlx0TkuJQ4a2IVaPtgZpA&s']"
 
 
 
