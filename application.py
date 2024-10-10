@@ -776,6 +776,7 @@ def handle_incoming_message():
                                 )
                                 css_output = message.content
                                 css_content = css_output[0].text
+                                css_output = css_content
 
 
 
