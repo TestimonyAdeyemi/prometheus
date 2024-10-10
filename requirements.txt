@@ -55,4 +55,4 @@ pillow
 googlesearch-python
 dateparser
 jsonify
-
+anthropic
