@@ -936,7 +936,7 @@ def handle_incoming_message():
                                 import os
                                 import google.generativeai as genai
 
-                                genai.configure(api_key=os.environ["AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8"])
+                                genai.configure(api_key="AIzaSyD3M4VzknhIcd-ikyA9P4LXiLEoSjH1JQ8")
 
                                 # Create the model
                                 generation_config = {
