@@ -966,7 +966,7 @@ def handle_incoming_message():
                                 print(bot_code)
 
                                 # Create directories for files if they don't exist
-                                os.makedirs("bot_website", exist_ok=True)
+                                os.makedirs("website_bot", exist_ok=True)
 
                                 # Write HTML content to a file
                                 with open("website_bot/index.html", "w") as html_file:
