@@ -1084,6 +1084,7 @@ def handle_incoming_message():
                                 site_name = "my-awesome-site"  # Optional: Provide a name to create a new site
 
                                 deploy_to_netlify(access_token, directory_path, site_name)
+                                chat_history = []
 
                                 
 
