@@ -439,7 +439,7 @@ def handle_incoming_message():
 
 
 
-                                chat_history.append({"role": "user", "content": f"reply with one or two words, pictures of what should be on the website that this person wants to build? this s the user's input: {body}"})
+                                chat_history.append({"role": "user", "content": f"reply with a search query, pictures of what should be on the website that this person wants to build? What should i search for? this the user's input: {body}"})
                             
                                 from groq import Groq
 
