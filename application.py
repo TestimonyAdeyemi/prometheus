@@ -476,28 +476,28 @@ def handle_incoming_message():
 
 
                                 
-                                # import requests
+                                import requests
 
-                                # def get_image_links(query, access_key, num_links=5):
-                                #     image_links = []
-                                #     # Construct the API request
-                                #     url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
-                                #     # Send the request
-                                #     response = requests.get(url)
-                                #     # Parse the JSON response
-                                #     data = response.json()
-                                #     # Extract image links
-                                #     for result in data["results"]:
-                                #         image_links.append(result["urls"]["full"])
-                                #     return image_links
+                                def get_image_links(query, access_key, num_links=5):
+                                    image_links = []
+                                    # Construct the API request
+                                    url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
+                                    # Send the request
+                                    response = requests.get(url)
+                                    # Parse the JSON response
+                                    data = response.json()
+                                    # Extract image links
+                                    for result in data["results"]:
+                                        image_links.append(result["urls"]["full"])
+                                    return image_links
 
-                                # # Example usage:
-                                # object_query =  query
-                                # access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
-                                # image_links = get_image_links(object_query, access_key)
-                                # print(image_links)
-                                # for link in image_links:
-                                #     print(link)
+                                # Example usage:
+                                object_query =  query
+                                access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
+                                image_links = get_image_links(object_query, access_key)
+                                print(image_links)
+                                for link in image_links:
+                                    print(link)
 
 
                                 import requests
@@ -531,7 +531,7 @@ def handle_incoming_message():
 
                                     return image_urls
 
-                                # Example usage:
+                                #Example usage:
                                 # search_query = query
                                 # image_urls = get_image_urls(search_query)
 
@@ -541,7 +541,7 @@ def handle_incoming_message():
                                 # image_links = image_urls
 
 
-                                image_links = "['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR3zygyl9qt5xYRbKO_tMhIM9k0giUt3fCjTuWg2bcopGYaoEf_Agn52nZEfE&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREB24jgWEQnzMDhORw_XJz-38U3pNaRKl6voHUybEd2RqO34lyZrmb2lI5Ig&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFFBJKHxGhNWi_NssWOfpGPiglJ-nvZhJVLi2mt8pPjkeSLVpY3dzfbk9lwg&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnJxKytCmMrp6z24RT5rcUPuDAXSzoJ2N7xdpD5zGAgq4rJUR-6cay-QQgcUM&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjpeCMFjjvOrAdSLFeY82ASEV5-c2GVcpijFzhBkbaWUiCz3K1gQeB0KiI2I&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2mD-wIxNnLW8z_1WoIaEIkSjHwgVriXQaRMFp-LwQWH-89oHo6LAgAQWelQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwp4IILc3OVlhw6wD3brwnRyb1egNq4fWkGrHsxYyK1qD6nroRZFwpX33z-Q&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI_qzKjg2Vr_ThUw8-d0tHeR0jn9Ge4RBQpGifKwOm26h0JQtURmfbs6Fd9iA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgBVtDFhijOs574noueTOJO0J0Wrz1-jIoC6Vh7PXHfG0oaKrMLphvYVrSzQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQKhVdqmVxFlvnN5icheRunry-iACXJe86co6Jqdlx0TkuJQ4a2IVaPtgZpA&s']"
+                                #image_links = "['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR3zygyl9qt5xYRbKO_tMhIM9k0giUt3fCjTuWg2bcopGYaoEf_Agn52nZEfE&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREB24jgWEQnzMDhORw_XJz-38U3pNaRKl6voHUybEd2RqO34lyZrmb2lI5Ig&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFFBJKHxGhNWi_NssWOfpGPiglJ-nvZhJVLi2mt8pPjkeSLVpY3dzfbk9lwg&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnJxKytCmMrp6z24RT5rcUPuDAXSzoJ2N7xdpD5zGAgq4rJUR-6cay-QQgcUM&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjpeCMFjjvOrAdSLFeY82ASEV5-c2GVcpijFzhBkbaWUiCz3K1gQeB0KiI2I&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2mD-wIxNnLW8z_1WoIaEIkSjHwgVriXQaRMFp-LwQWH-89oHo6LAgAQWelQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwp4IILc3OVlhw6wD3brwnRyb1egNq4fWkGrHsxYyK1qD6nroRZFwpX33z-Q&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI_qzKjg2Vr_ThUw8-d0tHeR0jn9Ge4RBQpGifKwOm26h0JQtURmfbs6Fd9iA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgBVtDFhijOs574noueTOJO0J0Wrz1-jIoC6Vh7PXHfG0oaKrMLphvYVrSzQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQKhVdqmVxFlvnN5icheRunry-iACXJe86co6Jqdlx0TkuJQ4a2IVaPtgZpA&s']"
 
 
 
