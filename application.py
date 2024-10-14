@@ -472,32 +472,69 @@ def handle_incoming_message():
 
                                 chat_history = []
 
+                                image_links = []
+                                search_query = query
 
-
-
-                                
                                 import requests
+                                from selenium import webdriver
+                                from selenium.webdriver.chrome.service import Service
+                                from selenium.webdriver.common.by import By
+                                from bs4 import BeautifulSoup
+                                import time
 
-                                def get_image_links(query, access_key, num_links=5):
-                                    image_links = []
-                                    # Construct the API request
-                                    url = f"https://api.unsplash.com/search/photos/?client_id={access_key}&query={query}&per_page={num_links}"
-                                    # Send the request
-                                    response = requests.get(url)
-                                    # Parse the JSON response
-                                    data = response.json()
-                                    # Extract image links
-                                    for result in data["results"]:
-                                        image_links.append(result["urls"]["full"])
-                                    return image_links
 
-                                # Example usage:
-                                object_query =  query
-                                access_key = "Zms9L2hVgdrmWDsLQ4SqLVI34NbSEnh3oG_xTVl5GW0"
-                                image_links = get_image_links(object_query, access_key)
+                                def get_image_links(query, num_images=10):
+                                    # replaces ' ' with %20
+                                    query = query.replace(' ', '%20')
+                                    # Format the query to be URL-safe
+                                    url = f"https://www.gettyimages.com/search/2/image-film?family=creative&phrase={query}&sort=mostpopular"
+                                    # Set up Chrome WebDriver (specify the path to your chromedriver if necessary)
+                                    service = Service('C:/Users/Ejitade Isaac/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe')  # Make sure you have ChromeDriver installed
+                                    driver = webdriver.Chrome(service=service)
+
+                                    # Open Pinterest
+                                    driver.get(url)
+
+                                    # Wait for the page to fully load (adjust time.sleep as needed)
+                                    time.sleep(5)
+
+                                    # Scroll down to load more content (Pinterest uses infinite scrolling)
+                                    SCROLL_PAUSE_TIME = 2
+
+                                    # Get scroll height
+                                    last_height = driver.execute_script("return document.body.scrollHeight")
+
+                                    while True:
+                                        # Scroll down to bottom
+                                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                                        
+                                        # Wait to load the page
+                                        time.sleep(SCROLL_PAUSE_TIME)
+                                        
+                                        # Calculate new scroll height and compare with last scroll height
+                                        new_height = driver.execute_script("return document.body.scrollHeight")
+                                        if new_height == last_height:
+                                            break
+                                        last_height = new_height
+
+                                    # After scrolling, extract the page source
+                                    page_source = driver.page_source
+
+                                    # Close the WebDriver
+                                    driver.quit()
+
+                                    # Parse the HTML using BeautifulSoup
+                                    soup = BeautifulSoup(page_source, 'html.parser')
+
+                                    # Find and extract image URLs
+                                    image_elements = soup.find_all('img', {'src': True})
+
+                                    # Extract and print the image URLs
+                                    image_urls = [img["src"] for img in image_elements[:num_images]]
+                                    return image_urls
+
+                                image_links = get_image_links(query)
                                 print(image_links)
-                                for link in image_links:
-                                    print(link)
 
 
                                 import requests
@@ -532,13 +569,26 @@ def handle_incoming_message():
                                     return image_urls
 
                                 # Example usage:
-                                search_query = query
                                 image_urls = get_image_urls(search_query)
 
                                 # Display the image URLs
                                 print("Image URLs:", image_urls)
 
-                                image_links = image_urls
+                                image_links += image_urls
+
+                                
+
+
+                                # def resolution():
+                                #     imageResolution = []
+                                #     for img in images:  # Loop through all images
+                                #         resolution = requests.get(img)
+                                #         res = Image.open(BytesIO(resolution.content))
+                                #         imageResolution.append(res.size)
+                                #     return imageResolution
+                                    
+                                # size = resolution()
+                                # print(size)
 
 
                                 #image_links = "['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR3zygyl9qt5xYRbKO_tMhIM9k0giUt3fCjTuWg2bcopGYaoEf_Agn52nZEfE&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREB24jgWEQnzMDhORw_XJz-38U3pNaRKl6voHUybEd2RqO34lyZrmb2lI5Ig&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFFBJKHxGhNWi_NssWOfpGPiglJ-nvZhJVLi2mt8pPjkeSLVpY3dzfbk9lwg&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnJxKytCmMrp6z24RT5rcUPuDAXSzoJ2N7xdpD5zGAgq4rJUR-6cay-QQgcUM&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjpeCMFjjvOrAdSLFeY82ASEV5-c2GVcpijFzhBkbaWUiCz3K1gQeB0KiI2I&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2mD-wIxNnLW8z_1WoIaEIkSjHwgVriXQaRMFp-LwQWH-89oHo6LAgAQWelQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwp4IILc3OVlhw6wD3brwnRyb1egNq4fWkGrHsxYyK1qD6nroRZFwpX33z-Q&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI_qzKjg2Vr_ThUw8-d0tHeR0jn9Ge4RBQpGifKwOm26h0JQtURmfbs6Fd9iA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgBVtDFhijOs574noueTOJO0J0Wrz1-jIoC6Vh7PXHfG0oaKrMLphvYVrSzQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQKhVdqmVxFlvnN5icheRunry-iACXJe86co6Jqdlx0TkuJQ4a2IVaPtgZpA&s']"
