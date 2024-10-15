@@ -114,42 +114,108 @@
 
 
 
-import requests
-from bs4 import BeautifulSoup
-import re
+# import requests
+# from bs4 import BeautifulSoup
+# import re
 
-def get_image_urls(query, num_images=10):
-    # Format the query to be URL-safe
-    query = query.replace(' ', '+')
-    url = f"https://www.google.com/search?q={query}&tbm=isch"
+# def get_image_urls(query, num_images=10):
+#     # Format the query to be URL-safe
+#     query = query.replace(' ', '+')
+#     url = f"https://www.google.com/search?q={query}&tbm=isch"
 
-    # Set up headers to mimic a regular browser request
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-    }
+#     # Set up headers to mimic a regular browser request
+#     headers = {
+#         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+#     }
 
-    # Send the request to Google
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        print("Failed to retrieve data")
-        return []
+#     # Send the request to Google
+#     response = requests.get(url, headers=headers)
+#     if response.status_code != 200:
+#         print("Failed to retrieve data")
+#         return []
 
-    # Parse the HTML content using BeautifulSoup
-    soup = BeautifulSoup(response.text, 'html.parser')
+#     # Parse the HTML content using BeautifulSoup
+#     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Find all image elements
-    image_elements = soup.find_all("img", {"src": re.compile("gstatic.com")})
+#     # Find all image elements
+#     image_elements = soup.find_all("img", {"src": re.compile("gstatic.com")})
     
-    # Extract image URLs
-    image_urls = [img["src"] for img in image_elements[:num_images]]
+#     # Extract image URLs
+#     image_urls = [img["src"] for img in image_elements[:num_images]]
 
+#     return image_urls
+
+# # Example usage:
+# search_query = "african hairstyles pinterest"
+# image_urls = get_image_urls(search_query)
+
+# # Display the image URLs
+# print("Image URLs:", image_urls)
+
+# image_links = image_urls
+
+
+
+
+
+
+import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
+import time
+
+query = ""
+def get_image_links(query, num_images=10):
+    # replaces ' ' with %20
+    query = query.replace(' ', '%20')
+    # Format the query to be URL-safe
+    url = f"https://www.gettyimages.com/search/2/image-film?family=creative&phrase={query}&sort=mostpopular"
+    # Set up Chrome WebDriver (specify the path to your chromedriver if necessary)
+    service = Service('C:/Users/Ejitade Isaac/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe')  # Make sure you have ChromeDriver installed
+    driver = webdriver.Chrome(service=service)
+
+    # Open Pinterest
+    driver.get(url)
+
+    # Wait for the page to fully load (adjust time.sleep as needed)
+    time.sleep(5)
+
+    # Scroll down to load more content (Pinterest uses infinite scrolling)
+    SCROLL_PAUSE_TIME = 2
+
+    # Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")
+
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        
+        # Wait to load the page
+        time.sleep(SCROLL_PAUSE_TIME)
+        
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+
+    # After scrolling, extract the page source
+    page_source = driver.page_source
+
+    # Close the WebDriver
+    driver.quit()
+
+    # Parse the HTML using BeautifulSoup
+    soup = BeautifulSoup(page_source, 'html.parser')
+
+    # Find and extract image URLs
+    image_elements = soup.find_all('img', {'src': True})
+
+    # Extract and print the image URLs
+    image_urls = [img["src"] for img in image_elements[:num_images]]
     return image_urls
 
-# Example usage:
-search_query = "african hairstyles pinterest"
-image_urls = get_image_urls(search_query)
-
-# Display the image URLs
-print("Image URLs:", image_urls)
-
-image_links = image_urls
+image_links = get_image_links(query)
+print(image_links)
